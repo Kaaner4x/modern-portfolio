@@ -1,0 +1,84 @@
+<mxfile host="Electron" modified="2024-05-19T10:00:00.000Z" agent="Mozilla/5.0" etag="etag-value" version="24.4.0" type="device">
+  <diagram id="modern_portfolio_schema" name="Modern Portfolio Architecture">
+    <mxGraphModel dx="1000" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- Background/Container -->
+        <mxCell id="AppContainer" value="Modern Portfolio Application (ASP.NET Core MVC)" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="200" y="80" width="600" height="480" as="geometry" />
+        </mxCell>
+
+        <!-- User -->
+        <mxCell id="User" value="User (Browser)" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="40" y="250" width="40" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Controller -->
+        <mxCell id="ControllerGrp" value="Controllers" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="AppContainer">
+          <mxGeometry x="30" y="50" width="160" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="HomeController" value="HomeController" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="ControllerGrp">
+          <mxGeometry x="20" y="50" width="120" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Models -->
+        <mxCell id="ModelGrp" value="Models (Domain)" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="AppContainer">
+          <mxGeometry x="380" y="50" width="180" height="360" as="geometry" />
+        </mxCell>
+        <mxCell id="ModelAbout" value="About" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="ModelGrp">
+          <mxGeometry x="30" y="50" width="120" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="ModelContact" value="Contact" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="ModelGrp">
+          <mxGeometry x="30" y="100" width="120" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="ModelProject" value="Project" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="ModelGrp">
+          <mxGeometry x="30" y="150" width="120" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="ModelSkill" value="Skill" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="ModelGrp">
+          <mxGeometry x="30" y="200" width="120" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="ModelTestimonial" value="Testimonial" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="ModelGrp">
+          <mxGeometry x="30" y="250" width="120" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="ModelError" value="ErrorViewModel" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="ModelGrp">
+          <mxGeometry x="30" y="300" width="120" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Views -->
+        <mxCell id="ViewGrp" value="Views (UI)" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="AppContainer">
+          <mxGeometry x="30" y="280" width="160" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="ViewHomeIndex" value="Home/Index.cshtml" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="ViewGrp">
+          <mxGeometry x="20" y="50" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ViewHomePrivacy" value="Home/Privacy.cshtml" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="ViewGrp">
+          <mxGeometry x="20" y="90" width="120" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Edges -->
+        <mxCell id="EdgeUserToController" value="HTTP Request" style="endArrow=classic;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="User" target="HomeController">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="EdgeControllerToModel" value="Uses / Populates" style="endArrow=classic;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.2;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="HomeController" target="ModelGrp">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="EdgeControllerToView" value="Returns View()" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="HomeController" target="ViewGrp">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="EdgeViewToUser" value="HTTP Response (HTML)" style="endArrow=classic;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="ViewGrp" target="User">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="60" y="435" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EdgeModelToView" value="Data Binding" style="endArrow=classic;dashed=1;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="ModelGrp" target="ViewGrp">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

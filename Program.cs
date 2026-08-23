@@ -1,29 +1,42 @@
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// IoC (Inversion of Control) konteynerine Controller ve View desteği (MVC) sunan servisleri ekler.
 builder.Services.AddControllersWithViews();
 
+// Uygulama (WebApplication) nesnesini derleyip oluşturur. 
+// Bu adımdan sonra servis kayıt aşaması biter ve HTTP istek boru hattı (Middleware Pipeline) yapılandırmasına geçilir.
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// HTTP istek boru hattının (Middleware Pipeline) yapılandırılması.
+// Uygulama Geliştirme (Development) ortamında çalışmıyorsa (örn. Canlı/Production ortamında):
 if (!app.Environment.IsDevelopment())
 {
+    // İstekler sırasında oluşabilecek işlenmemiş hataları yakalayarak kullanıcıyı "/Home/Error" sayfasına yönlendirir.
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    
+    // HTTP Strict Transport Security (HSTS) protokolünü etkinleştirir. 
+    // Tarayıcılara sitenin sadece HTTPS üzerinden açılması gerektiğini bildirerek güvenliği artırır.
     app.UseHsts();
 }
 
+// Güvensiz HTTP isteklerini otomatik olarak güvenli HTTPS protokolüne yönlendirir.
 app.UseHttpsRedirection();
+
+// Gelen isteklerin URL'lerine göre hangi rota (route) şablonuyla eşleşeceğini belirleyen yönlendirme (Routing) sistemini etkinleştirir.
 app.UseRouting();
 
+// Kullanıcının talep edilen kaynağa erişim yetkisini (Authorization) kontrol eder.
 app.UseAuthorization();
 
+// .NET 9 ile gelen, CSS, JS ve resim gibi statik dosyaların optimize edilerek (sıkıştırma, fingerprinting vb.) sunulmasını sağlayan middleware'i eşler.
 app.MapStaticAssets();
 
+// MVC mimarisine uygun varsayılan rota şablonunu tanımlar.
+// Herhangi bir Controller veya Action belirtilmediğinde varsayılan olarak HomeController sınıfındaki Index metodunu çalıştırır.
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
-
+// Uygulamayı başlatır ve gelen HTTP isteklerini dinlemeye (port üzerinden) başlar.
 app.Run();

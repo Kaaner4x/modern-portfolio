@@ -1,0 +1,47 @@
+Top-level statements: Program giriş noktası olan Program.cs dosyasındaki gereksiz şablon kodları ortadan kaldıran bir özelliktir. Örneğin basit bir "hello, world" yazını ekrana çıktı verebilmek için bile pek çok kod yazılması gerekiyordu. Top-level statements sayesinde sadece çalıştırılacak kodu yazdıktan sonra yazılması gereken kodları arka planda derleyici tarafından yazılması kolaylığı sağlandı.
+
+Dependency Injection: Dependency Injection (DI), bir sınıfın ihtiyaç duyduğu diğer nesneleri kendi içinde new anahtarıyla üretmek yerine, bu bağımlılıkları sınıfa dışarıdan (genellikle yapıcı metot/constructor üzerinden) teslim etme yöntemidir; bu sayede sınıfların birbiriyle olan sıkı bağları koparılıp araya arayüzler (interface) konur, böylece kodun iç yapısına hiç dokunmadan kullanılan servisleri değiştirebilme, bağımlılıkların yaşam sürelerini tek bir merkezden yönetebilme ve test anında gerçek servisler yerine sahte (mock) nesneler vererek kolayca birim test yazabilme esnekliği kazanılır.
+
+Middleware Pipeline: Middleware Pipeline, bir HTTP isteğinin uygulamaya ulaştığı andan yanıtın geri döndüğü ana kadar sırayla geçtiği yazılım bileşenleri zinciridir; gelen istek bu zincirdeki her bir halkadan (middleware) sırayla akar ve her bileşen isteği loglama, kimlik doğrulama veya yönlendirme gibi işlemler için kontrol edip bir sonrakine devredebilir ya da yetkisizlik ve hata gibi durumlarda akışı keserek (short-circuiting) doğrudan yanıt oluşturup geriye döndürebilir.
+
+Model Binding: İstemciden gelen HTTP isteği içerisindeki verileri (route parametreleri, sorgu dizileri/query string, form alanları veya JSON gövdesi) otomatik olarak okuyup bunları C# metot parametrelerine veya karmaşık nesne (model) tiplerine dönüştüren ve eşleştiren ASP.NET Core mekanizmasıdır; bu sayede geliştiriciler gelen request verilerini Request.Query veya Request.Form gibi yapılarla manuel olarak string bazlı ayrıştırmak ve tip dönüşümleriyle uğraşmak zorunda kalmadan doğrudan tip güvenli (type-safe) ve doğrulanmış (validation) verilerle çalışabilirler.
+
+Entity/Model: Entity veya Model, yazılım geliştirmede gerçek dünyadaki bir kavramı, nesneyi veya veri tabanındaki bir tabloyu temsil eden ve uygulamanın veri yapısını şekillendiren C# sınıflarıdır; genel MVC mimarisinde "Model" tüm veri ve iş kurallarını kapsayan geniş bir katmanı ifade ederken, Entity Framework gibi ORM araçları bağlamında "Entity" doğrudan veri tabanındaki bir tablo satırına karşılık gelen, benzersiz bir kimliğe (Primary Key/Id) ve sütunları temsil eden özelliklere (properties) sahip somut veri sınıfını temsil eder.
+
+PostgreSql Nedir?
+
+PostgreSQL, açık kaynak kodlu, ilişkisel (RDBMS) ve nesne yönelimli (ORDBMS) gelişmiş bir veri tabanı yönetim sistemidir. 
+
+30 yılı aşkın geliştirmeyle elde ettiği kararlılık, veri bütünlüğü ve zengin özellik setiyle "dünyanın en gelişmiş açık kaynak veri tabanı" olarak kabul edilir.
+
+TEMEL ÖZELLİKLERİ
+
+* Veri Bütünlüğü ve Güvenilirlik:
+  ACID (Atomicity, Consistency, Isolation, Durability) standartlarıyla %100 
+  uyumludur. Veri kaybını önleme ve çökme sonrası hızlı toparlanma konusunda 
+  çok başarılıdır.
+
+* Esnek Veri Tipleri:
+  Standart SQL veri tiplerine ek olarak JSON/JSONB, array (dizi), hstore 
+  (anahtar-değer), UUID ve coğrafi veri (PostGIS eklentisi ile) desteği sunar.
+
+* Gelişmiş İndeksleme:
+  B-Tree, Hash, GiST, SP-GiST, GIN ve BRIN gibi çok çeşitli indeksleme 
+  mekanizmaları ile devasa veri setlerinde yüksek sorgu performansı sağlar.
+
+* Genişletilebilirlik:
+  Kendi özel fonksiyonlarınızı (PL/pgSQL, Python, Perl vb. dillerde), veri 
+  tiplerinizi veya operatörlerinizi tanımlamanıza olanak tanır.
+
+* Yüksek Eşzamanlılık (MVCC):
+  Çoklu Sürüm Eşzamanlılık Kontrolü (MVCC) sayesinde okuma ve yazma işlemleri 
+  birbiriyle çakışmadan aynı anda yüksek performansla çalışır.
+
+NE ZAMAN TERCİH EDİLMELİ?
+
+* Finansal sistemler veya e-ticaret gibi yüksek veri bütünlüğü gerektiren 
+  projelerde
+* Hem ilişkisel veri hem de JSON verilerini tek bir platformda işlemek 
+  istediğinizde
+* Coğrafi bilgi sistemleri (GIS) uygulamalarında (PostGIS ile)
+* Büyük veri analitiği ve karmaşık OLAP sorgularında
