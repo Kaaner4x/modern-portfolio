@@ -3,6 +3,8 @@ var builder = WebApplication.CreateBuilder(args);
 // IoC (Inversion of Control) konteynerine Controller ve View desteği (MVC) sunan servisleri ekler.
 builder.Services.AddControllersWithViews();
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 // Uygulama (WebApplication) nesnesini derleyip oluşturur. 
 // Bu adımdan sonra servis kayıt aşaması biter ve HTTP istek boru hattı (Middleware Pipeline) yapılandırmasına geçilir.
 var app = builder.Build();

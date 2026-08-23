@@ -65,6 +65,12 @@
         <mxCell id="EdgeModelToView" edge="1" parent="1" source="ModelGrp" style="endArrow=classic;dashed=1;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="ViewGrp" value="Data Binding">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
+        <mxCell id="Database" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" value="PostgreSQL DB&amp;#10;(Docker Container)" vertex="1">
+          <mxGeometry height="80" width="120" x="850" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="EdgeAppToDatabase" edge="1" parent="1" source="AppContainer" style="endArrow=classic;startArrow=classic;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" target="Database" value="ADO.NET / Npgsql">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>

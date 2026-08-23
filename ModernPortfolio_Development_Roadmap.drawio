@@ -26,17 +26,20 @@
           <mxGeometry x="500" y="235" width="100" height="30" as="geometry" />
         </mxCell>
 
-        <!-- Adım 3: Veritabanı (EF Core) -->
-        <mxCell id="Step3" value="3. Veritabanı ve DbContext&lt;br&gt;(EF Core Entegrasyonu)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1" vertex="1" parent="1">
+        <!-- Adım 3: Veritabanı -->
+        <mxCell id="Step3" value="3. Veritabanı&lt;br&gt;(PostgreSQL Entegrasyonu)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1" vertex="1" parent="1">
           <mxGeometry x="320" y="320" width="160" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="Status3" value="SIRADAKİ / YAPILIYOR" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#b08c00;fontStyle=1" vertex="1" parent="1">
+        <mxCell id="Status3" value="TAMAMLANDI" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#2d7600;fontStyle=1" vertex="1" parent="1">
           <mxGeometry x="500" y="335" width="140" height="30" as="geometry" />
         </mxCell>
 
         <!-- Adım 4: Controller'lar -->
-        <mxCell id="Step4" value="4. Controller&#39;ların Yazılması&lt;br&gt;(İş Mantığı ve Yönlendirmeler)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" vertex="1" parent="1">
+        <mxCell id="Step4" value="4. Controller&#39;ların Yazılması&lt;br&gt;(İş Mantığı ve Yönlendirmeler)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1" vertex="1" parent="1">
           <mxGeometry x="320" y="420" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Status4" value="SIRADAKİ / YAPILIYOR" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#b08c00;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="500" y="435" width="140" height="30" as="geometry" />
         </mxCell>
 
         <!-- Adım 5: Arayüz (Views) -->
