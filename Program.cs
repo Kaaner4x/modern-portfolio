@@ -1,7 +1,24 @@
+using ModernPortfolio.Repositories.@abstract;
+using ModernPortfolio.Repositories.concrete;
+using ModernPortfolio.Services.@abstract;
+using ModernPortfolio.Services.concrete;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // IoC (Inversion of Control) konteynerine Controller ve View desteği (MVC) sunan servisleri ekler.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+builder.Services.AddScoped<ISkillRepository, SkillRepository>();
+builder.Services.AddScoped<IAboutRepository, AboutRepository>();
+builder.Services.AddScoped<ITestimonialRepository, TestimonialRepository>();
+builder.Services.AddScoped<IContactRepository, ContactRepository>();
+
+builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<ISkillService, SkillService>();
+builder.Services.AddScoped<IAboutService, AboutService>();
+builder.Services.AddScoped<ITestimonialService, TestimonialService>();
+builder.Services.AddScoped<IContactService, ContactService>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -15,7 +32,7 @@ if (!app.Environment.IsDevelopment())
 {
     // İstekler sırasında oluşabilecek işlenmemiş hataları yakalayarak kullanıcıyı "/Home/Error" sayfasına yönlendirir.
     app.UseExceptionHandler("/Home/Error");
-    
+
     // HTTP Strict Transport Security (HSTS) protokolünü etkinleştirir. 
     // Tarayıcılara sitenin sadece HTTPS üzerinden açılması gerektiğini bildirerek güvenliği artırır.
     app.UseHsts();
