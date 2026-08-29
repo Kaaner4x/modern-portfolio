@@ -8,13 +8,13 @@ namespace ModernPortfolio.Repositories.concrete;
 public class GenericRepository<T> : IGenericRepository<T> where T : class
 {
     protected readonly string _connectionString;
-    private readonly string _tableName;
+    protected readonly string _tableName;
 
-    public GenericRepository(IConfiguration configuration)
+    public GenericRepository(IConfiguration configuration, string? tableName = null)
     {
         _connectionString = configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string not found!");
 
-        _tableName = typeof(T).Name + "s";
+        _tableName = tableName ?? (typeof(T).Name == "About" ? "About" : typeof(T).Name + "s");
     }
     public async Task<int> CreateAsync(T entity)
     {
@@ -26,9 +26,9 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         var propertyNames = properties.Select(p => p.Name).ToArray();
         var paramaterNames = propertyNames.Select(p => $"@{p}").ToArray();
 
-        var sql = $"INSERT INTO {_tableName} ({string.Join(", ", propertyNames)})" +
-                  $"VALUES ({string.Join(", ", paramaterNames)})" +
-                  $"RETURNING ID";
+        var sql = $"INSERT INTO {_tableName} ({string.Join(", ", propertyNames)}) " +
+                  $"VALUES ({string.Join(", ", paramaterNames)}) " +
+                  $"RETURNING Id;";
 
         var id = await connection.QuerySingleAsync<int>(sql, entity);
         return id;
@@ -45,7 +45,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     public async Task<IEnumerable<T>> GetAllAsync()
     {
         using var connection = new NpgsqlConnection(_connectionString);
-        var sql = $"SELECT * from {_tableName}";
+        var sql = $"SELECT * FROM {_tableName}";
         var result = await connection.QueryAsync<T>(sql);
         return result;
     }
@@ -53,7 +53,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     public async Task<T?> GetByIdAsync(int id)
     {
         using var connection = new NpgsqlConnection(_connectionString);
-        var sql = $"SELECT * FROM {_tableName} WHERE Id=@Id";
+        var sql = $"SELECT * FROM {_tableName} WHERE Id = @Id";
         var result = await connection.QueryFirstOrDefaultAsync<T>(sql, new { Id = id });
         return result;
     }
@@ -65,7 +65,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
             .Where(p => p.Name != "Id" && p.GetValue(entity) != null && p.Name != "CreatedAt")
             .ToList();
 
-        var setClause = string.Join(", ", properties.Select(p => $"{p.Name}=${p.Name}"));
+        var setClause = string.Join(", ", properties.Select(p => $"{p.Name} = @{p.Name}"));
         var sql = $"UPDATE {_tableName} SET {setClause} WHERE Id = @Id";
         var affectedRows = await connection.ExecuteAsync(sql, entity);
         return affectedRows > 0;

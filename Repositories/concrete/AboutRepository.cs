@@ -6,7 +6,7 @@ namespace ModernPortfolio.Repositories.concrete;
 
 public class AboutRepository : GenericRepository<About>, IAboutRepository
 {
-    public AboutRepository(IConfiguration configuration) : base(configuration)
+    public AboutRepository(IConfiguration configuration) : base(configuration, "About")
     {
     }
 }

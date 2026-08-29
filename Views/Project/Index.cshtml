@@ -1,0 +1,48 @@
+@model List<ProjectViewModel>
+
+@{
+    ViewData["Title"] = "Projects";
+}
+
+<!-- Portfolio Section -->
+    <section id="portfolio" class="portfolio section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Portfolio</h2>
+        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+      </div><!-- End Section Title -->
+
+      <div class="container">
+
+        <div class="isotope-layout" data-default-filter="*" data-layout="masonry" data-sort="original-order">
+
+          @* <ul class="portfolio-filters isotope-filters" data-aos="fade-up" data-aos-delay="100">
+            <li data-filter="*" class="filter-active">All</li>
+            <li data-filter=".filter-app">App</li>
+            <li data-filter=".filter-product">Card</li>
+            <li data-filter=".filter-branding">Web</li>
+          </ul><!-- End Portfolio Filters --> *@
+
+          <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
+
+            @foreach(var project in Model)
+            {
+                <div class="col-lg-3 col-md-6 portfolio-item isotope-item">
+              <img src="@project.ImageUrl" class="img-fluid" alt="@project.Title">
+              <div class="portfolio-info">
+                <h4>@project.Title</h4>
+                <p>@project.Description</p>
+                <a href="@project.ImageUrl" title="@project.Title" data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                <a asp-controller="Project" asp-action="Details" asp-route-id = "@project.Id" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
+              </div>
+            </div><!-- End Portfolio Item -->
+            }
+
+          </div><!-- End Portfolio Container -->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Portfolio Section -->

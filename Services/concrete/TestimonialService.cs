@@ -102,7 +102,7 @@ public class TestimonialService : ITestimonialService
         }
 
         // ClientPosition
-        if (string.IsNullOrWhiteSpace(testimonial.ClientPosition) && testimonial.ClientPosition.Length > 100)
+        if (!string.IsNullOrWhiteSpace(testimonial.ClientPosition) && testimonial.ClientPosition.Length > 100)
         {
             throw new ArgumentException("Testimonial client position cannot exceed 100 chracters!", nameof(testimonial));
         }
