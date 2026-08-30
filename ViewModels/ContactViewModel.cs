@@ -6,8 +6,7 @@ public class ContactViewModel
 {
     [Display(Name = "Your Name")]
     [Required(ErrorMessage = "Name is required.")]
-    [StringLength(100, ErrorMessage = "Name cannot exceed 100 characters.")]
-    [MinLength(3, ErrorMessage = "Name cannot exceed 100 characters.")]
+    [StringLength(100, MinimumLength = 3, ErrorMessage = "Name must be between 3 and 100 characters.")]
     public string Name { get; set; } = string.Empty;
 
     [Display(Name = "Your Email")]
@@ -18,12 +17,12 @@ public class ContactViewModel
 
     [Display(Name = "Subject")]
     [Required(ErrorMessage = "Subject is required.")]
-    [StringLength(200, ErrorMessage = "Subject cannot exceed 200 characters.")]
-    public string? Subject { get; set; }
+    [StringLength(200, MinimumLength = 3, ErrorMessage = "Subject must be between 3 and 200 characters.")]
+    public string Subject { get; set; } = string.Empty;
 
     [Display(Name = "Message")]
     [Required(ErrorMessage = "Message is required.")]
-    [StringLength(2000, ErrorMessage = "Message cannot exceed 2000 characters.")]
+    [StringLength(2000, MinimumLength = 10, ErrorMessage = "Message must be between 10 and 2000 characters.")]
     public string Message { get; set; } = string.Empty;
 }
 
