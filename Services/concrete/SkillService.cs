@@ -76,11 +76,11 @@ public class SkillService : ISkillService
         var existingSkill = await _repository.GetByIdAsync(skill.Id);
         if (existingSkill is null)
         {
-            throw new ArgumentNullException($"Skill with ID {skill.Id} not found!", nameof(existingSkill));
+            throw new InvalidOperationException($"Skill with ID {skill.Id} not found!");
         }
         ValidateSkill(skill);
-        skill.CreatedAt = DateTime.UtcNow;
-        var result = await _repository.UpdateAsync(existingSkill);
+        skill.CreatedAt = existingSkill.CreatedAt;
+        var result = await _repository.UpdateAsync(skill);
         return result;
     }
 

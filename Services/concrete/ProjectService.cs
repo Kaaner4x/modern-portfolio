@@ -22,7 +22,7 @@ public class ProjectService : IProjectService
         }
         ValidateProject(project);
         project.CreatedAt = DateTime.UtcNow;
-        if (!string.IsNullOrWhiteSpace(project.GithubUrl))
+        if (!string.IsNullOrWhiteSpace(project.ProjectUrl))
         {
             project.ProjectUrl = NormalizeUrl(project.ProjectUrl);
         }
@@ -92,7 +92,7 @@ public class ProjectService : IProjectService
 
         ValidateProject(project);
 
-         if (!string.IsNullOrWhiteSpace(project.GithubUrl))
+        if (!string.IsNullOrWhiteSpace(project.ProjectUrl))
         {
             project.ProjectUrl = NormalizeUrl(project.ProjectUrl);
         }
@@ -125,7 +125,7 @@ public class ProjectService : IProjectService
         }
 
         // ImageUrl
-        if (string.IsNullOrWhiteSpace(project.ImageUrl) && project.ImageUrl.Length > 500)
+        if (!string.IsNullOrWhiteSpace(project.ImageUrl) && project.ImageUrl.Length > 500)
         {
             throw new ArgumentException("Project image url cannot exceed 500 characters!", nameof(project));
         }
@@ -141,13 +141,13 @@ public class ProjectService : IProjectService
             throw new ArgumentException("Github Url format is invalid!", nameof(project));
         }
 
-        //Url
+        //Url Length
         if (!string.IsNullOrWhiteSpace(project.ProjectUrl) && project.ProjectUrl.Length > 500)
         {
             throw new ArgumentException("Project Url cannot exceed 500 characters!", nameof(project));
         }
 
-        if (!string.IsNullOrWhiteSpace(project.GithubUrl) && !IsValidUrl(project.GithubUrl))
+        if (!string.IsNullOrWhiteSpace(project.GithubUrl) && project.GithubUrl.Length > 500)
         {
             throw new ArgumentException("Github Url cannot exceed 500 characters!", nameof(project));
         }
@@ -169,7 +169,7 @@ public class ProjectService : IProjectService
             return url;
         }
         url = url.Trim();
-        if (!url.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || !url.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+        if (!url.StartsWith("http://", StringComparison.OrdinalIgnoreCase) && !url.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
         {
             url = "https://" + url;
         }
