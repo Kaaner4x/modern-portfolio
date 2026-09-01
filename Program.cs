@@ -50,6 +50,11 @@ app.UseAuthorization();
 // .NET 9 ile gelen, CSS, JS ve resim gibi statik dosyaların optimize edilerek (sıkıştırma, fingerprinting vb.) sunulmasını sağlayan middleware'i eşler.
 app.MapStaticAssets();
 
+app.MapControllerRoute(
+    name:"areas",
+    pattern:"{area:exists}/{controller=Dashboard}/{action=Index}/{id?}"
+);
+
 // MVC mimarisine uygun varsayılan rota şablonunu tanımlar.
 // Herhangi bir Controller veya Action belirtilmediğinde varsayılan olarak HomeController sınıfındaki Index metodunu çalıştırır.
 app.MapControllerRoute(
