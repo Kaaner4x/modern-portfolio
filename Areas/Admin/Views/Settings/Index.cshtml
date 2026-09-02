@@ -1,0 +1,143 @@
+@model SettingsViewModel
+@{
+    ViewData["Title"] = "User & Security Settings";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <!-- Page Header -->
+        <div class="col-12">
+            <div class="bg-light rounded p-4 d-flex align-items-center justify-content-between">
+                <div>
+                    <h4 class="mb-1 text-primary"><i class="fa fa-user-cog me-2"></i>User & Security Settings</h4>
+                    <p class="text-muted mb-0 small">Manage your account username and password securely from this panel.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Username Update Card -->
+        <div class="col-12 col-xl-6">
+            <div class="bg-light rounded h-100 p-4">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="btn-square bg-primary text-white rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                        <i class="fa fa-user fa-lg"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">User Profile</h5>
+                        <small class="text-muted">The username used to sign in to the panel</small>
+                    </div>
+                </div>
+
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fa fa-check-circle me-2"></i>@TempData["SuccessMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fa fa-exclamation-triangle me-2"></i>@TempData["ErrorMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                @if (TempData["InfoMessage"] != null)
+                {
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        <i class="fa fa-info-circle me-2"></i>@TempData["InfoMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                <form asp-area="Admin" asp-controller="Settings" asp-action="UpdateUsername" method="post">
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="mb-3">
+                        <label asp-for="UserName" class="form-label fw-bold"></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa fa-at"></i></span>
+                            <input asp-for="UserName" class="form-control" placeholder="Enter new username" required />
+                        </div>
+                        <span asp-validation-for="UserName" class="text-danger small"></span>
+                        <div class="form-text">This will be your display name and login username.</div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 py-2 mt-3">
+                        <i class="fa fa-save me-2"></i>Update Username
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Password Change Card -->
+        <div class="col-12 col-xl-6">
+            <div class="bg-light rounded h-100 p-4">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="btn-square bg-warning text-white rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                        <i class="fa fa-key fa-lg"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">Change Password</h5>
+                        <small class="text-muted">Update your password regularly for better security</small>
+                    </div>
+                </div>
+
+                @if (TempData["PasswordSuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fa fa-check-circle me-2"></i>@TempData["PasswordSuccessMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                @if (TempData["PasswordErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fa fa-exclamation-triangle me-2"></i>@TempData["PasswordErrorMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                <form asp-area="Admin" asp-controller="Settings" asp-action="ChangePassword" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="UserName" />
+
+                    <div class="mb-3">
+                        <label asp-for="CurrentPassword" class="form-label fw-bold"></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa fa-lock"></i></span>
+                            <input asp-for="CurrentPassword" type="password" class="form-control" placeholder="Enter current password" required autocomplete="current-password" />
+                        </div>
+                        <span asp-validation-for="CurrentPassword" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="NewPassword" class="form-label fw-bold"></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa fa-shield-alt"></i></span>
+                            <input asp-for="NewPassword" type="password" class="form-control" placeholder="Enter new password (Min 6 characters)" required autocomplete="new-password" />
+                        </div>
+                        <span asp-validation-for="NewPassword" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ConfirmNewPassword" class="form-label fw-bold"></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa fa-check-double"></i></span>
+                            <input asp-for="ConfirmNewPassword" type="password" class="form-control" placeholder="Confirm new password" required autocomplete="new-password" />
+                        </div>
+                        <span asp-validation-for="ConfirmNewPassword" class="text-danger small"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-warning text-dark w-100 py-2 mt-3">
+                        <i class="fa fa-shield-alt me-2"></i>Update Password
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,8 @@
+CREATE TABLE
+    IF NOT EXISTS Users (
+        Id SERIAL PRIMARY KEY,
+        UserName VARCHAR(50) NOT NULL UNIQUE,
+        PasswordHash VARCHAR(255) NOT NULL,
+        CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UpdatedAt TIMESTAMP
+    );

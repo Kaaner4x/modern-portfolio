@@ -5,9 +5,11 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseAppHost>false</UseAppHost>
+    <AssemblyName>ModernPortfolioApp</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
     <PackageReference Include="Dapper" Version="2.1.79" />
     <PackageReference Include="Npgsql" Version="10.0.3" />
   </ItemGroup>
@@ -24,6 +26,7 @@
     <Folder Include="Services\abstract\" />
     <Folder Include="Services\concrete\" />
     <Folder Include="ViewModels\" />
+    <Folder Include="Views\Account\" />
   </ItemGroup>
 
 </Project>
