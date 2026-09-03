@@ -30,33 +30,33 @@
 </p>
 
 <p align="center">
+  <a href="#-project-overview">Overview</a> •
   <a href="#-application-showcase">Showcase</a> •
-  <a href="#-key-features">Key Features</a> •
+  <a href="#-key-features">Features</a> •
   <a href="#-system-architecture">Architecture</a> •
-  <a href="#-technology-stack">Tech Stack</a> •
-  <a href="#-database-design--schema">Database Schema</a> •
-  <a href="#-getting-started">Getting Started</a> •
+  <a href="#-database-design--schema">Database</a> •
+  <a href="#-quick-start--installation-guide">Installation</a> •
+  <a href="#-configuration--environment-variables">Configuration</a> •
   <a href="#-docker-deployment">Docker</a> •
-  <a href="#-security--best-practices">Security</a> •
+  <a href="#-security-architecture">Security</a> •
   <a href="#-project-structure">Structure</a> •
+  <a href="#-contributing">Contributing</a> •
   <a href="#-license">License</a>
 </p>
 
 ---
 
-## 📌 Overview / Genel Bakış
+## 📌 Project Overview
 
-**ModernPortfolio** is a high-performance, full-stack, enterprise-grade web application and Content Management Portal developed using **ASP.NET Core (.NET 10)**. Built upon clean architectural principles and optimized for maximum throughput and sub-millisecond query execution, it replaces heavy ORM abstractions with **Dapper Micro-ORM** and native **PostgreSQL** integration.
+**ModernPortfolio** is a high-performance, full-stack enterprise web application and dynamic Content Management System (CMS) built with **ASP.NET Core (.NET 10)**. Architected for speed, resilience, and maintainability, it leverages **Dapper Micro-ORM** and native **PostgreSQL** connection pooling to deliver sub-millisecond query execution without the heavy overhead of traditional ORMs.
 
-The solution features a **public-facing corporate showcase** alongside a **secure administrative control console (CMS)** equipped with cookie-based claims authentication, password hashing with BCrypt, automated database schema provisioning, secure file upload pipelines, and multi-stage containerization.
-
-> **Türkçe Özet**: ModernPortfolio; en güncel **.NET 10**, **Dapper Micro-ORM** ve **PostgreSQL 16** teknolojileri kullanılarak geliştirilmiş, kurumsal düzeyde dinamik bir portföy ve içerik yönetim (CMS) sistemidir. Proje; Generic Repository Deseni, Asenkron Programlama (async/await), Katmanlı Mimari (N-Tier Architecture), BCrypt tabanlı kimlik doğrulama, otomatik veritabanı tabloları oluşturma/tohumlama (Database Initializer & Seed) ve Docker Compose orkestrasyonunu tam uyumlu olarak sunar.
+The platform provides a responsive, modern public-facing portfolio alongside a secured administrative control console (`/Admin`). Key capabilities include automated database provisioning and seed data initialization, cookie-based authentication with ClaimsPrincipal, BCrypt cryptographic password hashing, defensive file upload pipelines, and multi-stage Docker containerization.
 
 ---
 
 ## 📸 Application Showcase
 
-Explore the live visual tour of both the **Public Showcase Portal** and the **Admin Control Console (CMS)**.
+Explore the visual tour of the **Public Showcase Portal** and the **Admin Control Console (CMS)**.
 
 ### 🌐 1. Public Showcase Portal
 
@@ -65,36 +65,36 @@ Explore the live visual tour of both the **Public Showcase Portal** and the **Ad
     <td width="50%" align="center">
       <img src="docs/screenshots/01_home_hero.png" alt="Home Landing Hero" width="100%"/>
       <br><strong>Landing Page & Hero Section</strong><br>
-      <em>Dynamic corporate headline, call-to-action triggers, and responsive navbar.</em>
+      <em>Dynamic corporate headline, call-to-action triggers, and responsive navigation bar.</em>
     </td>
     <td width="50%" align="center">
       <img src="docs/screenshots/02_home_testimonials.png" alt="Client Testimonials Slider" width="100%"/>
       <br><strong>Client Endorsements & Reviews Slider</strong><br>
-      <em>Interactive touch-enabled carousel displaying verified partner endorsements.</em>
+      <em>Interactive touch-enabled carousel displaying verified client reviews and ratings.</em>
     </td>
   </tr>
   <tr>
     <td width="50%" align="center">
       <img src="docs/screenshots/03_about_us.png" alt="About Us Corporate Profile" width="100%"/>
       <br><strong>About Us & Corporate Profile</strong><br>
-      <em>Comprehensive company vision, years in industry, contact hotlines, and social links.</em>
+      <em>Company background, years of industry experience, direct contact channels, and social links.</em>
     </td>
     <td width="50%" align="center">
       <img src="docs/screenshots/04_skills_competencies.png" alt="Technology Stack & Competencies" width="100%"/>
       <br><strong>Technology Stack & Competencies Matrix</strong><br>
-      <em>Animated proficiency bars reflecting dynamic backend mastery ratings.</em>
+      <em>Dynamic proficiency progress bars driven directly by database values.</em>
     </td>
   </tr>
   <tr>
     <td width="50%" align="center">
       <img src="docs/screenshots/05_solutions_gallery.png" alt="Enterprise Solutions Gallery" width="100%"/>
       <br><strong>Enterprise Solutions & Project Portfolio</strong><br>
-      <em>Filterable solution cards, lightbox previews, and external repository links.</em>
+      <em>Filterable project gallery with image previews, case study links, and GitHub shortcuts.</em>
     </td>
     <td width="50%" align="center">
       <img src="docs/screenshots/06_solution_details.png" alt="Solution Case Study Details" width="100%"/>
       <br><strong>Solution Case Study & Architecture Details</strong><br>
-      <em>Deep dive into architecture overview, live demo buttons, and source repositories.</em>
+      <em>In-depth project breakdown, system architecture overview, live demo, and source repository.</em>
     </td>
   </tr>
 </table>
@@ -108,48 +108,48 @@ Explore the live visual tour of both the **Public Showcase Portal** and the **Ad
     <td width="50%" align="center">
       <img src="docs/screenshots/07_admin_login.png" alt="Admin Authentication Gateway" width="100%"/>
       <br><strong>Admin Authentication Gateway</strong><br>
-      <em>Secure Cookie authentication with ClaimsPrincipal and Remember-Me persistence.</em>
+      <em>Secure cookie-based authentication with ClaimsPrincipal and Remember-Me persistence.</em>
     </td>
     <td width="50%" align="center">
       <img src="docs/screenshots/08_admin_dashboard.png" alt="Admin Executive Dashboard" width="100%"/>
       <br><strong>Executive Management Dashboard</strong><br>
-      <em>Centralized hub providing quick metrics and direct actions for all portal modules.</em>
+      <em>Centralized control center with live site shortcut and quick-action module cards.</em>
     </td>
   </tr>
   <tr>
     <td width="50%" align="center">
       <img src="docs/screenshots/09_admin_inquiries.png" alt="Client Inquiries Inbox" width="100%"/>
       <br><strong>Client Inquiries & Message Center</strong><br>
-      <em>Lead tracking inbox with status badges (New / Read), counters, and quick actions.</em>
+      <em>Lead tracking inbox with status indicators (New / Read), counters, and quick actions.</em>
     </td>
     <td width="50%" align="center">
       <img src="docs/screenshots/10_admin_inquiry_modal.png" alt="Inquiry Detail Modal & Email Action" width="100%"/>
       <br><strong>Inquiry Message Detail & Action Modal</strong><br>
-      <em>Instant message inspection, email reply shortcut, and mark-as-read toggle.</em>
+      <em>Instant message inspection, one-click email reply shortcut, and mark-as-read toggle.</em>
     </td>
   </tr>
   <tr>
     <td width="50%" align="center">
       <img src="docs/screenshots/11_admin_company_profile.png" alt="Company Profile Management" width="100%"/>
       <br><strong>Company Profile & Bio Management</strong><br>
-      <em>Update corporate mission, contact info, social accounts, and profile picture upload.</em>
+      <em>Real-time editor for corporate headline, mission statement, contact details, and branding image.</em>
     </td>
     <td width="50%" align="center">
       <img src="docs/screenshots/12_admin_tech_stack.png" alt="Tech Stack Capabilities Manager" width="100%"/>
       <br><strong>Tech Stack & Competency Console</strong><br>
-      <em>Real-time proficiency percentages, display sequence ordering, and CRUD controls.</em>
+      <em>Proficiency percentage management, display sequence ordering, and CRUD controls.</em>
     </td>
   </tr>
   <tr>
     <td width="50%" align="center">
       <img src="docs/screenshots/13_admin_edit_skill.png" alt="Edit Technology Competency" width="100%"/>
       <br><strong>Competency & Proficiency Slider Editor</strong><br>
-      <em>Interactive slider control to configure proficiency levels from foundation to mastery.</em>
+      <em>Interactive slider control to configure proficiency levels from foundation to industry mastery.</em>
     </td>
     <td width="50%" align="center">
       <img src="docs/screenshots/14_admin_solutions_management.png" alt="Solutions Portfolio Management" width="100%"/>
       <br><strong>Solutions Portfolio Management</strong><br>
-      <em>Comprehensive project list, publication status badges, and direct edit/delete tools.</em>
+      <em>Comprehensive project listing, publication status badges, and direct edit/delete tools.</em>
     </td>
   </tr>
   <tr>
@@ -178,45 +178,44 @@ Explore the live visual tour of both the **Public Showcase Portal** and the **Ad
 ## ✨ Key Features
 
 ### 🌐 1. Public Showcase & Client Portal
-- **Modern Responsive Landing Experience**: Designed with modern UI/UX principles, animated transitions (AOS), dynamic hero sections, and clean typography.
-- **Company & Executive Profile**: Dynamic "About" section featuring company vision, statistics, team insights, contact details, and social links.
-- **Tech Stack & Capabilities Matrix**: Interactive skill bars with real-time percentage indicators and custom display ordering.
-- **Interactive Solutions / Project Portfolio**: Filterable project gallery with modal previews, detailed case study pages, live demo links, and GitHub repository shortcuts.
-- **Client Endorsement Carousel**: Dynamic testimonials slider showcasing verified client reviews, star ratings, and corporate titles.
-- **Direct Lead Intake (Contact Form)**: Clean contact form with input validation, flash message feedback, and direct persistence into PostgreSQL.
+- **Modern Responsive Design**: Engineered with Bootstrap 5, AOS scroll animations, Swiper sliders, and GLightbox image modals.
+- **Company & Professional Profile**: Dynamic bio, years of industry experience, verified contact channels, and social links.
+- **Dynamic Tech Stack Matrix**: Interactive competency bars with real-time percentage indicators and custom display ordering.
+- **Solutions & Case Study Portfolio**: Filterable project gallery with dedicated case study detail pages, live demo triggers, and source repository buttons.
+- **Client Endorsements Carousel**: Testimonials slider displaying verified client endorsements, star ratings, and company positions.
+- **Direct Lead Intake**: Contact form with server-side model validation, user feedback alerts, and persistence to PostgreSQL.
 
 ### 🛡️ 2. Administrative Control Console (`/Admin`)
-- **Secured Area Architecture**: Protected via `[Area("Admin")]`, `[Authorize]`, and automated Anti-Forgery Token validation.
-- **Dashboard Overview**: Quick access to live site, management metrics, and portal statistics.
-- **Solutions & Case Studies Management**: Full CRUD operations for portfolio projects, including image uploads, external demo links, GitHub links, and live visibility toggles.
-- **Skill & Competency Management**: Add, update, re-order, and delete technical competencies and mastery percentages.
-- **Testimonial Moderation Engine**: Approve, suspend, edit, or remove enterprise client endorsements and star ratings.
-- **Inquiry & Lead Center**: Review incoming contact messages, toggle read/unread status, and perform message housekeeping.
-- **Company Profile Configuration**: Real-time management of corporate bio, contact emails, social channels, and branded media.
-- **Security & Account Center**: Update admin usernames and securely change administrative passwords with BCrypt hash verification.
+- **Secured Area Architecture**: Protected by ASP.NET Core Cookie Authentication (`[Area("Admin")]`, `[Authorize]`) and anti-forgery tokens (`[AutoValidateAntiforgeryToken]`).
+- **Executive Dashboard**: High-level metrics, system statistics, and instant shortcuts to manage each application module.
+- **Projects & Solutions Management**: Complete CRUD operations with image file upload validation, GitHub/live demo links, and active/inactive visibility toggles.
+- **Technical Skills Management**: Create, update, re-order, and delete technical skills and proficiency percentages.
+- **Testimonial Moderation Engine**: Approve, suspend, edit, or remove client reviews and ratings.
+- **Inquiry & Lead Center**: Review incoming contact messages, toggle read/unread status, and perform message deletions.
+- **Security & Profile Center**: Update administrator username and securely change passwords with salted BCrypt hashing.
 
 ### ⚙️ 3. Engineering & Architectural Highlights
-- **Self-Healing Database Provisioning**: Automatic PostgreSQL table creation (`CREATE TABLE IF NOT EXISTS`) and default seed data initialization on startup.
-- **Zero-Downtime Cloud Support**: Dynamic database connection resolution supporting standard connection strings and cloud 12-factor `DATABASE_URL` strings (Render, Railway, Supabase, Neon).
-- **Secure File Storage Engine**: Robust file upload handler validating extensions, MIME types, file size boundaries (max 5MB), unique GUID naming, and path traversal security guards.
-- **Microsecond Database Execution**: High-throughput raw SQL queries via Dapper and Npgsql connection pooling.
+- **Self-Healing Database Provisioning**: Automated database table creation (`CREATE TABLE IF NOT EXISTS`) and initial seed data insertion on startup.
+- **Dynamic Cloud Connection Resolver**: Built-in parser for cloud-managed 12-factor `DATABASE_URL` strings (e.g., Render, Railway, Supabase, Neon).
+- **Defensive File Handling Pipeline**: Secure image upload validation with MIME type whitelist, extension checks, 5MB file size limit, GUID file renaming, and path traversal guards.
+- **Micro-ORM Performance**: Lightweight, high-throughput SQL operations via Dapper and Npgsql connection pooling.
 
 ---
 
 ## 🏛 System Architecture
 
-The application adopts an **N-Tier Clean Architecture** with strict Separation of Concerns (SoC), Inversion of Control (IoC), and Loose Coupling.
+ModernPortfolio follows an **N-Tier Clean Architecture** emphasizing Separation of Concerns (SoC), Inversion of Control (IoC), and Loose Coupling:
 
 ```mermaid
 graph TD
     subgraph Client Layer
-        Browser[Client Browser / Mobile / Desktop]
+        Browser[Client Web Browser / Mobile Device]
     end
 
     subgraph Presentation Layer [ASP.NET Core MVC .NET 10]
         Controllers[Public & Admin Controllers]
         ViewModels[Strongly Typed ViewModels]
-        Views[Razor Views & Partial Views]
+        Views[Razor Views & Partial Templates]
         Auth[Cookie Authentication & Anti-CSRF]
     end
 
@@ -254,11 +253,11 @@ graph TD
     ImageService <-->|I/O Operations| FileSystem
 ```
 
-> 📐 **Architecture Diagrams**: High-level system architecture and development roadmap source files are available in [`docs/diagrams/ModernPortfolio_Architecture.drawio`](docs/diagrams/ModernPortfolio_Architecture.drawio) and [`docs/diagrams/ModernPortfolio_Development_Roadmap.drawio`](docs/diagrams/ModernPortfolio_Development_Roadmap.drawio).
+> 📐 **Architecture Source Diagrams**: Draw.io diagram source files are located in [`docs/diagrams/ModernPortfolio_Architecture.drawio`](docs/diagrams/ModernPortfolio_Architecture.drawio) and [`docs/diagrams/ModernPortfolio_Development_Roadmap.drawio`](docs/diagrams/ModernPortfolio_Development_Roadmap.drawio).
 
-### Design Patterns & Principles
+### Architectural Design Patterns
 
-| Design Pattern / Principle | Implementation Details |
+| Pattern / Principle | Implementation Details |
 | :--- | :--- |
 | **Generic Repository Pattern** | `IGenericRepository<T>` & `GenericRepository<T>` provide generic async CRUD operations (`CreateAsync`, `GetByIdAsync`, `GetAllAsync`, `UpdateAsync`, `DeleteAsync`) via Reflection and Dapper parameterization. |
 | **Dependency Injection (IoC)** | All services and repositories are registered with `Scoped` lifetime in `Program.cs`, promoting high testability and clean lifecycle management. |
@@ -271,7 +270,7 @@ graph TD
 
 ## 🗄 Database Design & Schema
 
-ModernPortfolio runs on **PostgreSQL 16**. The schema is managed dynamically by the `DatabaseInitializerService` on startup, ensuring the database is always in a ready-to-serve state without manual migration friction.
+ModernPortfolio runs on **PostgreSQL 16**. The schema is managed dynamically on startup by `DatabaseInitializerService`, ensuring automatic creation of all tables and seed data without requiring manual SQL script executions.
 
 ```mermaid
 erDiagram
@@ -341,71 +340,49 @@ erDiagram
 
 ---
 
-## 💻 Technology Stack
+## 🚀 Quick Start & Installation Guide
 
-### Backend & Frameworks
-- **Framework**: [.NET 10.0 (ASP.NET Core MVC)](https://dotnet.microsoft.com/)
-- **Programming Language**: [C# 14 / C# 13](https://learn.microsoft.com/en-us/dotnet/csharp/)
-- **Micro-ORM**: [Dapper (v2.1.79)](https://github.com/DapperLib/Dapper)
-- **Database Driver**: [Npgsql (v10.0.3)](https://www.npgsql.org/)
-- **Security & Cryptography**: [BCrypt.Net-Next (v4.2.0)](https://github.com/BcryptNet/bcrypt.net-next)
-
-### Database & DevOps
-- **Database Engine**: [PostgreSQL 16-Alpine](https://hub.docker.com/_/postgres)
-- **Containerization**: [Docker](https://www.docker.com/) (Multi-stage build)
-- **Container Orchestration**: [Docker Compose](https://docs.docker.com/compose/) (v3.8)
-
-### Frontend & UI
-- **Styling & Components**: [Bootstrap 5](https://getbootstrap.com/), Custom Modern CSS3
-- **Iconography**: [Font Awesome 5](https://fontawesome.com/), [Bootstrap Icons](https://icons.getbootstrap.com/)
-- **Interactive UI Libraries**:
-  - [AOS (Animate On Scroll)](https://michalsnik.github.io/aos/) - Fluid scroll animations
-  - [Swiper](https://swiperjs.com/) - Touch-enabled testimonial sliders
-  - [GLightbox](https://biati-digital.github.io/glightbox/) - Lightbox image preview modal
-  - [Isotope](https://isotope.metafizzy.co/) - Portfolio grid layout & filtering
-  - [PureCounter](https://github.com/srexi/purecounterjs) - Dynamic counter animations
-  - [Chart.js](https://www.chartjs.org/) - Dashboard metrics visualization
-
----
-
-## 🚀 Getting Started
-
-Follow these instructions to get a local copy of **ModernPortfolio** up and running on your development machine.
+Get **ModernPortfolio** running locally on your machine in just a few minutes.
 
 ### Prerequisites
-Ensure you have the following installed:
-- [.NET 10.0 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
-- [PostgreSQL 16+](https://www.postgresql.org/download/) *(or Docker)*
-- [Git](https://git-scm.com/)
+- [Git](https://git-scm.com/) installed
+- [.NET 10.0 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) *(for local development)*
+- [Docker & Docker Compose](https://www.docker.com/products/docker-desktop/) *(recommended for instant setup)*
+- [PostgreSQL 16+](https://www.postgresql.org/download/) *(if not using Docker)*
 
 ---
 
-### Option 1: Quick Run with Docker Compose (Recommended)
+### Option A: One-Command Setup with Docker Compose (Recommended)
 
-The easiest way to run ModernPortfolio along with PostgreSQL is using Docker Compose:
+Docker Compose starts both the PostgreSQL database container and the .NET 10 web application container simultaneously.
 
 ```bash
 # 1. Clone the repository
 git clone https://github.com/Kaaner4x/modern-portfolio.git
 cd modern-portfolio
 
-# 2. Build and launch all services in detached mode
+# 2. Build images and start containers in detached mode
 docker compose up --build -d
 
-# 3. View running container logs
-docker compose logs -f
+# 3. View live application logs (optional)
+docker compose logs -f app
 ```
 
-The application will be accessible at:
+Once running, access the application:
 - 🌐 **Public Website**: [http://localhost:8080](http://localhost:8080)
 - 🔐 **Admin Console**: [http://localhost:8080/Admin](http://localhost:8080/Admin)
-- 🗄️ **PostgreSQL Port**: `localhost:5430`
+- 🗄️ **PostgreSQL Database Port**: `localhost:5430`
+
+To stop the containers:
+```bash
+docker compose down
+```
 
 ---
 
-### Option 2: Local Development Setup
+### Option B: Local Setup with .NET 10 CLI & PostgreSQL
 
-If you wish to develop and run the application natively with the .NET SDK:
+If you prefer to run the application directly on your host machine:
 
 #### 1. Clone the Repository
 ```bash
@@ -414,12 +391,12 @@ cd modern-portfolio
 ```
 
 #### 2. Configure Database Connection
-Open `appsettings.json` (or `appsettings.Development.json`) and configure your local PostgreSQL connection string:
+Open `appsettings.json` (or create `appsettings.Development.json`) and configure your local PostgreSQL connection string:
 
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Host=localhost; Port=5432; Database=modernportfolio; Username=postgres; Password=your_password"
+    "DefaultConnection": "Host=localhost; Port=5432; Database=modernportfolio; Username=postgres; Password=your_secure_password"
   },
   "Logging": {
     "LogLevel": {
@@ -431,45 +408,75 @@ Open `appsettings.json` (or `appsettings.Development.json`) and configure your l
 }
 ```
 
-> **Note**: You do **not** need to manually run any SQL migration scripts! The built-in `DatabaseInitializerService` automatically creates all tables and seeds initial data upon first launch.
+> **Note**: You do **not** need to manually run any migration scripts or execute SQL files. The application's `DatabaseInitializerService` automatically creates all required tables and seeds default portfolio data on first run.
 
-#### 3. Restore & Run Application
+#### 3. Restore Dependencies & Run
 ```bash
-# Restore NuGet dependencies
+# Restore NuGet packages
 dotnet restore
 
-# Build the solution
+# Build the project
 dotnet build
 
-# Launch the development server
+# Launch the application
 dotnet run
 ```
 
-Navigate to [http://localhost:5000](http://localhost:5000) or [https://localhost:5001](https://localhost:5001) in your browser.
+Open your browser and navigate to:
+- `http://localhost:5000` or `https://localhost:5001`
 
 ---
 
 ## 🔑 Default Administrator Credentials
 
-When the database is initialized for the first time, a default administrator account is seeded automatically:
+On initial database initialization, a default administrator account is automatically provisioned:
 
-| Attribute | Default Value | Description |
+| Property | Default Value | Notes |
 | :--- | :--- | :--- |
-| **Admin Portal URL** | `/Admin/Account/Login` | Dedicated login gateway |
-| **Default Username** | `admin` | Initial admin identifier |
-| **Default Password** | `admin123!` | Hashed with BCrypt in PostgreSQL |
+| **Login Gateway** | `/Admin/Account/Login` | Dedicated admin authentication route |
+| **Default Username** | `admin` | Initial admin account identifier |
+| **Default Password** | `admin123!` | Stored as a salted BCrypt hash |
 
-> ⚠️ **Security Notice**: Immediately log in and change your administrator username and password from the **Portal Settings (`/Admin/Settings`)** menu before deploying to a public server!
+> ⚠️ **Important Security Notice**: Immediately after your first login, navigate to **Portal Settings (`/Admin/Settings`)** to update your username and change the administrator password.
+
+---
+
+## ⚙️ Configuration & Environment Variables
+
+ModernPortfolio supports multiple methods for supplying configuration parameters and database connection strings.
+
+### 1. Connection String Formats
+
+#### Standard Connection String (`appsettings.json` or Environment Variable)
+```
+Host=localhost; Port=5432; Database=modernportfolio; Username=your_username; Password=your_password;
+```
+
+#### Cloud Database URI Format (`DATABASE_URL`)
+ModernPortfolio includes a built-in URI parser for 12-factor cloud platforms (Render, Railway, Supabase, Neon):
+```
+DATABASE_URL=postgres://your_username:your_password@your_host:5432/your_database
+```
+
+When `DATABASE_URL` is detected in the environment, `Program.cs` automatically parses the URI, extracts credentials, and enables SSL connection mode.
+
+### 2. Environment Variable Reference
+
+| Environment Variable | Description | Example / Default |
+| :--- | :--- | :--- |
+| `ASPNETCORE_ENVIRONMENT` | Application runtime environment | `Development` or `Production` |
+| `ASPNETCORE_URLS` | Binding URLs and listening ports | `http://+:8080` or `http://localhost:5000` |
+| `ConnectionStrings__DefaultConnection` | Standard PostgreSQL connection string | `Host=postgres;Port=5432;Database=modernportfolio;...` |
+| `DATABASE_URL` | Cloud PostgreSQL URI string | `postgres://user:pass@host:5432/db` |
 
 ---
 
 ## 🐳 Docker Deployment & Multi-Stage Build
 
-The project includes an optimized multi-stage `Dockerfile` and a production-ready `docker-compose.yml`:
+The project includes an optimized multi-stage `Dockerfile` to create lightweight, production-ready container images:
 
-### Multi-Stage Build Highlights
 ```dockerfile
-# 1. Build Stage with .NET 10 SDK
+# Stage 1: Build & Publish with .NET 10 SDK
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 COPY ["ModernPortfolio.csproj", "./"]
@@ -477,7 +484,7 @@ RUN dotnet restore "ModernPortfolio.csproj"
 COPY . .
 RUN dotnet publish "ModernPortfolio.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-# 2. Lightweight Runtime Stage with ASP.NET 10 Runtime
+# Stage 2: Minimal Runtime Image with ASP.NET 10
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
 COPY --from=build /app/publish .
@@ -487,24 +494,47 @@ EXPOSE 8080
 ENTRYPOINT ["dotnet", "ModernPortfolioApp.dll"]
 ```
 
-### Cloud Database Support (`DATABASE_URL`)
-ModernPortfolio natively parses cloud-managed database URI formats (e.g., Render, Railway, Neon, Supabase):
-```csharp
-// Program.cs automatically parses postgres://user:pass@host:port/dbname
-var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
-```
-Simply set the `DATABASE_URL` environment variable on your hosting provider, and the app will configure SSL connections automatically!
+### Docker Compose Architecture
+The `docker-compose.yml` configures two isolated services:
+1. **`app`**: The .NET 10 web application container running on port `8080`.
+2. **`postgres`**: A `postgres:16-alpine` database container with a persistent named volume (`postgres_data`) mapped to external port `5430`.
 
 ---
 
-## 🔒 Security & Best Practices
+## 🔒 Security Architecture
 
-- **BCrypt Password Hashing**: Passwords are never stored in plaintext. They are salted and hashed using work-factor optimized BCrypt algorithms.
-- **CSRF Defense**: Global `[AutoValidateAntiforgeryToken]` attribute configured on `BaseAdminController` blocks Cross-Site Request Forgery attacks.
-- **Path Traversal Protection**: `ImageService` verifies canonical paths (`Path.GetFullPath`) against target root directories to prevent file manipulation exploits.
-- **Strict File Upload Validation**: Enforces whitelist checks against file extensions (`.jpg`, `.jpeg`, `.png`, `.webp`, `.gif`) and MIME types.
-- **Cookie Hardening**: Authentication cookies are marked `HttpOnly` with strict lifetime policies to prevent XSS session theft.
-- **Reverse Proxy Header Forwarding**: Includes `ForwardedHeadersOptions` for seamless SSL offloading and client IP tracking behind Cloudflare, NGINX, Render, or Railway reverse proxies.
+- **Cryptographic Password Security**: Passwords are never stored in plaintext. They are salted and hashed using work-factor optimized `BCrypt.Net-Next`.
+- **Anti-CSRF Protection**: Global `[AutoValidateAntiforgeryToken]` enforcement on `BaseAdminController` prevents Cross-Site Request Forgery attacks.
+- **Defensive File Uploads**: `ImageService` verifies allowed extensions (`.jpg`, `.jpeg`, `.png`, `.webp`, `.gif`), checks content MIME types, enforces a 5MB size limit, generates unique GUID filenames, and validates canonical paths (`Path.GetFullPath`) against directory traversal exploits.
+- **Hardened Cookie Policy**: Authentication cookies are marked `HttpOnly` with `SameAsRequest` secure policies and strict expiration lifespans.
+- **Reverse Proxy Header Forwarding**: Configured with `ForwardedHeadersOptions` for seamless SSL termination and client IP forwarding behind Cloudflare, NGINX, Render, or Railway reverse proxies.
+
+---
+
+## 💻 Technology Stack
+
+### Backend & Core
+- **Framework**: [.NET 10.0 (ASP.NET Core MVC)](https://dotnet.microsoft.com/)
+- **Language**: [C# 14 / C# 13](https://learn.microsoft.com/en-us/dotnet/csharp/)
+- **Micro-ORM**: [Dapper (v2.1.79)](https://github.com/DapperLib/Dapper)
+- **Database Driver**: [Npgsql (v10.0.3)](https://www.npgsql.org/)
+- **Cryptography**: [BCrypt.Net-Next (v4.2.0)](https://github.com/BcryptNet/bcrypt.net-next)
+
+### Database & DevOps
+- **Database Engine**: [PostgreSQL 16-Alpine](https://hub.docker.com/_/postgres)
+- **Containerization**: [Docker](https://www.docker.com/) (Multi-stage build)
+- **Container Orchestration**: [Docker Compose](https://docs.docker.com/compose/) (v3.8)
+
+### Frontend & UI
+- **Styling**: [Bootstrap 5](https://getbootstrap.com/), Modern CSS3
+- **Icons**: [Font Awesome 5](https://fontawesome.com/), [Bootstrap Icons](https://icons.getbootstrap.com/)
+- **UI Libraries**:
+  - [AOS (Animate On Scroll)](https://michalsnik.github.io/aos/) - Scroll animations
+  - [Swiper](https://swiperjs.com/) - Testimonials slider
+  - [GLightbox](https://biati-digital.github.io/glightbox/) - Lightbox preview modal
+  - [Isotope](https://isotope.metafizzy.co/) - Portfolio layout and filtering
+  - [PureCounter](https://github.com/srexi/purecounterjs) - Dynamic counter animations
+  - [Chart.js](https://www.chartjs.org/) - Dashboard metrics visualization
 
 ---
 
@@ -660,10 +690,10 @@ modern-portfolio/
 
 Contributions, issues, and feature requests are welcome!
 
-1. Fork the Project (`https://github.com/Kaaner4x/modern-portfolio/fork`)
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'feat: Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
+1. Fork the repository (`https://github.com/Kaaner4x/modern-portfolio/fork`)
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'feat: Add AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
 ---
@@ -677,15 +707,6 @@ MIT License
 Copyright (c) 2026 Kaaner4x
 ```
 
----
-
-## 👨‍💻 Author & Contact
-
-**Kaaner4x**
-
-- 🐙 **GitHub**: [@Kaaner4x](https://github.com/Kaaner4x)
-- 💼 **Project Repository**: [modern-portfolio](https://github.com/Kaaner4x/modern-portfolio)
-
 <p align="center">
-  <sub>Built with ❤️ using <strong>.NET 10</strong>, <strong>Dapper</strong>, and <strong>PostgreSQL</strong>.</sub>
+  <sub>Built with modern software engineering practices using <strong>.NET 10</strong>, <strong>Dapper</strong>, and <strong>PostgreSQL</strong>.</sub>
 </p>
