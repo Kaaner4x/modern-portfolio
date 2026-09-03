@@ -1,0 +1,80 @@
+<mxfile host="Electron" agent="Mozilla/5.0">
+  <diagram id="modern_portfolio_schema" name="Modern Portfolio Architecture">
+    <mxGraphModel dx="1030" dy="674" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="AppContainer" parent="1" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" value="Modern Portfolio Application (ASP.NET Core MVC)" vertex="1">
+          <mxGeometry height="480" width="600" x="200" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="ControllerGrp" parent="AppContainer" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;" value="Controllers" vertex="1">
+          <mxGeometry height="150" width="160" x="30" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="HomeController" parent="ControllerGrp" style="rounded=1;whiteSpace=wrap;html=1;" value="HomeController" vertex="1">
+          <mxGeometry height="40" width="120" x="20" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ModelGrp" parent="AppContainer" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=#ffe6cc;strokeColor=#d79b00;" value="Models (Domain)" vertex="1">
+          <mxGeometry height="360" width="180" x="380" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ModelAbout" parent="ModelGrp" style="rounded=1;whiteSpace=wrap;html=1;" value="About" vertex="1">
+          <mxGeometry height="35" width="120" x="30" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ModelContact" parent="ModelGrp" style="rounded=1;whiteSpace=wrap;html=1;" value="Contact" vertex="1">
+          <mxGeometry height="35" width="120" x="30" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="ModelProject" parent="ModelGrp" style="rounded=1;whiteSpace=wrap;html=1;" value="Project" vertex="1">
+          <mxGeometry height="35" width="120" x="30" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="ModelSkill" parent="ModelGrp" style="rounded=1;whiteSpace=wrap;html=1;" value="Skill" vertex="1">
+          <mxGeometry height="35" width="120" x="30" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="ModelTestimonial" parent="ModelGrp" style="rounded=1;whiteSpace=wrap;html=1;" value="Testimonial" vertex="1">
+          <mxGeometry height="35" width="120" x="30" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="ModelError" parent="ModelGrp" style="rounded=1;whiteSpace=wrap;html=1;" value="ErrorViewModel" vertex="1">
+          <mxGeometry height="35" width="120" x="30" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="ViewGrp" parent="AppContainer" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=#e1d5e7;strokeColor=#9673a6;" value="Views (UI)" vertex="1">
+          <mxGeometry height="150" width="160" x="30" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="ViewHomeIndex" parent="ViewGrp" style="rounded=1;whiteSpace=wrap;html=1;" value="Home/Index.cshtml" vertex="1">
+          <mxGeometry height="30" width="120" x="20" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ViewHomePrivacy" parent="ViewGrp" style="rounded=1;whiteSpace=wrap;html=1;" value="Home/Privacy.cshtml" vertex="1">
+          <mxGeometry height="30" width="120" x="20" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="User" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#f8cecc;strokeColor=#b85450;" value="User (Browser)" vertex="1">
+          <mxGeometry height="80" width="40" x="40" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="EdgeUserToController" edge="1" parent="1" source="User" style="endArrow=classic;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="HomeController" value="HTTP Request">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="EdgeControllerToModel" edge="1" parent="1" source="HomeController" style="endArrow=classic;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.2;entryDx=0;entryDy=0;entryPerimeter=0;" target="ModelGrp" value="Uses / Populates">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="EdgeControllerToView" edge="1" parent="1" source="HomeController" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="ViewGrp" value="Returns View()">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="EdgeViewToUser" edge="1" parent="1" source="ViewGrp" style="endArrow=classic;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="User" value="HTTP Response (HTML)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="60" y="435" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EdgeModelToView" edge="1" parent="1" source="ModelGrp" style="endArrow=classic;dashed=1;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="ViewGrp" value="Data Binding">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Database" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" value="PostgreSQL DB&amp;#10;(Docker Container)" vertex="1">
+          <mxGeometry height="80" width="120" x="850" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="EdgeAppToDatabase" edge="1" parent="1" source="RepositoryGrp" style="endArrow=classic;startArrow=classic;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" target="Database" value="Dapper / Npgsql">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="RepositoryGrp" parent="AppContainer" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=#fff2cc;strokeColor=#d6b656;" value="Repositories (Dapper)" vertex="1">
+          <mxGeometry height="150" width="160" x="205" y="160" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
