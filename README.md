@@ -33,6 +33,7 @@
 </p>
 
 <p align="center">
+  <a href="#-application-showcase">Showcase</a> •
   <a href="#-key-features">Key Features</a> •
   <a href="#-system-architecture">Architecture</a> •
   <a href="#-technology-stack">Tech Stack</a> •
@@ -53,6 +54,127 @@
 The solution features a **public-facing corporate showcase** alongside a **secure administrative control console (CMS)** equipped with cookie-based claims authentication, password hashing with BCrypt, automated database schema provisioning, secure file upload pipelines, and multi-stage containerization.
 
 > **Türkçe Özet**: ModernPortfolio; en güncel **.NET 10**, **Dapper Micro-ORM** ve **PostgreSQL 16** teknolojileri kullanılarak geliştirilmiş, kurumsal düzeyde dinamik bir portföy ve içerik yönetim (CMS) sistemidir. Proje; Generic Repository Deseni, Asenkron Programlama (async/await), Katmanlı Mimari (N-Tier Architecture), BCrypt tabanlı kimlik doğrulama, otomatik veritabanı tabloları oluşturma/tohumlama (Database Initializer & Seed) ve Docker Compose orkestrasyonunu tam uyumlu olarak sunar.
+
+---
+
+## 📸 Application Showcase
+
+Explore the live user experience of both the **Public Showcase Portal** and the **Admin Control Console (CMS)**.
+
+### 🌐 1. Public Showcase Portal
+
+<table align="center" width="100%">
+  <tr>
+    <td width="50%" align="center">
+      <img src="showcase/01_home_hero.png" alt="Home Landing Hero" width="100%"/>
+      <br><strong>Landing Page & Hero Section</strong><br>
+      <em>Dynamic corporate headline, call-to-action triggers, and responsive navbar.</em>
+    </td>
+    <td width="50%" align="center">
+      <img src="showcase/02_home_testimonials.png" alt="Client Testimonials Slider" width="100%"/>
+      <br><strong>Client Endorsements & Reviews Slider</strong><br>
+      <em>Interactive touch-enabled carousel displaying verified partner endorsements.</em>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <img src="showcase/03_about_us.png" alt="About Us Corporate Profile" width="100%"/>
+      <br><strong>About Us & Corporate Profile</strong><br>
+      <em>Comprehensive company vision, years in industry, contact hotlines, and social links.</em>
+    </td>
+    <td width="50%" align="center">
+      <img src="showcase/04_skills_competencies.png" alt="Technology Stack & Competencies" width="100%"/>
+      <br><strong>Technology Stack & Competencies Matrix</strong><br>
+      <em>Animated proficiency bars reflecting dynamic backend mastery ratings.</em>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <img src="showcase/05_solutions_gallery.png" alt="Enterprise Solutions Gallery" width="100%"/>
+      <br><strong>Enterprise Solutions & Project Portfolio</strong><br>
+      <em>Filterable solution cards, lightbox previews, and external repository links.</em>
+    </td>
+    <td width="50%" align="center">
+      <img src="showcase/06_solution_details.png" alt="Solution Case Study Details" width="100%"/>
+      <br><strong>Solution Case Study & Architecture Details</strong><br>
+      <em>Deep dive into architecture overview, live demo buttons, and source repositories.</em>
+    </td>
+  </tr>
+</table>
+
+---
+
+### 🛡️ 2. Administrative Control Console (CMS)
+
+<table align="center" width="100%">
+  <tr>
+    <td width="50%" align="center">
+      <img src="showcase/07_admin_login.png" alt="Admin Authentication Gateway" width="100%"/>
+      <br><strong>Admin Authentication Gateway</strong><br>
+      <em>Secure Cookie authentication with ClaimsPrincipal and Remember-Me persistence.</em>
+    </td>
+    <td width="50%" align="center">
+      <img src="showcase/08_admin_dashboard.png" alt="Admin Executive Dashboard" width="100%"/>
+      <br><strong>Executive Management Dashboard</strong><br>
+      <em>Centralized hub providing quick metrics and direct actions for all portal modules.</em>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <img src="showcase/09_admin_inquiries.png" alt="Client Inquiries Inbox" width="100%"/>
+      <br><strong>Client Inquiries & Message Center</strong><br>
+      <em>Lead tracking inbox with status badges (New / Read), counters, and quick actions.</em>
+    </td>
+    <td width="50%" align="center">
+      <img src="showcase/10_admin_inquiry_modal.png" alt="Inquiry Detail Modal & Email Action" width="100%"/>
+      <br><strong>Inquiry Message Detail & Action Modal</strong><br>
+      <em>Instant message inspection, email reply shortcut, and mark-as-read toggle.</em>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <img src="showcase/11_admin_company_profile.png" alt="Company Profile Management" width="100%"/>
+      <br><strong>Company Profile & Bio Management</strong><br>
+      <em>Update corporate mission, contact info, social accounts, and profile picture upload.</em>
+    </td>
+    <td width="50%" align="center">
+      <img src="showcase/12_admin_tech_stack.png" alt="Tech Stack Capabilities Manager" width="100%"/>
+      <br><strong>Tech Stack & Competency Console</strong><br>
+      <em>Real-time proficiency percentages, display sequence ordering, and CRUD controls.</em>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <img src="showcase/13_admin_edit_skill.png" alt="Edit Technology Competency" width="100%"/>
+      <br><strong>Competency & Proficiency Slider Editor</strong><br>
+      <em>Interactive slider control to configure proficiency levels from foundation to mastery.</em>
+    </td>
+    <td width="50%" align="center">
+      <img src="showcase/14_admin_solutions_management.png" alt="Solutions Portfolio Management" width="100%"/>
+      <br><strong>Solutions Portfolio Management</strong><br>
+      <em>Comprehensive project list, publication status badges, and direct edit/delete tools.</em>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <img src="showcase/15_admin_edit_solution.png" alt="Edit Solution & Media Upload" width="100%"/>
+      <br><strong>Solution Editor & Media Upload Engine</strong><br>
+      <em>Manage case studies, GitHub repositories, live demo URLs, and cover image uploads.</em>
+    </td>
+    <td width="50%" align="center">
+      <img src="showcase/16_admin_client_reviews.png" alt="Client Review Moderation" width="100%"/>
+      <br><strong>Client Review Moderation & Live Approval</strong><br>
+      <em>One-click endorsement approval/suspension, 1-5 star ratings, and client photo management.</em>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center">
+      <img src="showcase/17_admin_security_settings.png" alt="Portal Security & BCrypt Password Management" width="70%"/>
+      <br><strong>Portal Security & BCrypt Password Center</strong><br>
+      <em>Admin username updates and cryptographic password changes secured with BCrypt.Net.</em>
+    </td>
+  </tr>
+</table>
 
 ---
 
@@ -488,6 +610,25 @@ modern-portfolio/
 │   ├── MigrateEditedAboutAndAddedFacts.sql
 │   └── SeedData.sql
 │
+├── showcase/                          # High-resolution application screenshots
+│   ├── 01_home_hero.png
+│   ├── 02_home_testimonials.png
+│   ├── 03_about_us.png
+│   ├── 04_skills_competencies.png
+│   ├── 05_solutions_gallery.png
+│   ├── 06_solution_details.png
+│   ├── 07_admin_login.png
+│   ├── 08_admin_dashboard.png
+│   ├── 09_admin_inquiries.png
+│   ├── 10_admin_inquiry_modal.png
+│   ├── 11_admin_company_profile.png
+│   ├── 12_admin_tech_stack.png
+│   ├── 13_admin_edit_skill.png
+│   ├── 14_admin_solutions_management.png
+│   ├── 15_admin_edit_solution.png
+│   ├── 16_admin_client_reviews.png
+│   └── 17_admin_security_settings.png
+│
 ├── wwwroot/                           # Static web assets
 │   ├── admin/                         # Admin panel CSS, JS, vendor libs
 │   └── ui/                            # Public portal styles, JS, images, uploads
@@ -508,6 +649,7 @@ modern-portfolio/
 - [x] Auto-provisioning database schema initializer with seed data
 - [x] BCrypt secure authentication & portal settings management
 - [x] Cloud-native `DATABASE_URL` connection string auto-parser
+- [x] Comprehensive visual showcase and screenshot documentation
 - [ ] Multi-language support & internationalization (i18n / Localization)
 - [ ] Redis Distributed Caching for ultra-high traffic portfolio views
 - [ ] Headless RESTful & GraphQL API endpoints for external mobile integration
