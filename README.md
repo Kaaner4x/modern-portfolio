@@ -253,8 +253,6 @@ graph TD
     ImageService <-->|I/O Operations| FileSystem
 ```
 
-> 📐 **Architecture Source Diagrams**: Draw.io diagram source files are located in [`docs/diagrams/ModernPortfolio_Architecture.drawio`](docs/diagrams/ModernPortfolio_Architecture.drawio) and [`docs/diagrams/ModernPortfolio_Development_Roadmap.drawio`](docs/diagrams/ModernPortfolio_Development_Roadmap.drawio).
-
 ### Architectural Design Patterns
 
 | Pattern / Principle | Implementation Details |
@@ -562,9 +560,6 @@ modern-portfolio/
 │   └── ProjectController.cs           # Public portfolio & case study details
 │
 ├── docs/                              # Project documentation & visual assets
-│   ├── diagrams/                      # System architecture & roadmap Draw.io files
-│   │   ├── ModernPortfolio_Architecture.drawio
-│   │   └── ModernPortfolio_Development_Roadmap.drawio
 │   └── screenshots/                   # High-resolution application screenshots
 │       ├── 01_home_hero.png
 │       ├── 02_home_testimonials.png
