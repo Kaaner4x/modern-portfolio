@@ -12,9 +12,6 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Kaaner4x/modern-portfolio/actions/workflows/ci.yml">
-    <img src="https://github.com/Kaaner4x/modern-portfolio/actions/workflows/ci.yml/badge.svg" alt=".NET CI Build Status" />
-  </a>
   <a href="https://dotnet.microsoft.com/download/dotnet/10.0">
     <img src="https://img.shields.io/badge/.NET-10.0-512BD4?style=flat&logo=dotnet&logoColor=white" alt=".NET 10" />
   </a>
@@ -357,7 +354,6 @@ erDiagram
 - **Database Engine**: [PostgreSQL 16-Alpine](https://hub.docker.com/_/postgres)
 - **Containerization**: [Docker](https://www.docker.com/) (Multi-stage build)
 - **Container Orchestration**: [Docker Compose](https://docs.docker.com/compose/) (v3.8)
-- **Continuous Integration (CI)**: [GitHub Actions](https://github.com/features/actions)
 
 ### Frontend & UI
 - **Styling & Components**: [Bootstrap 5](https://getbootstrap.com/), Custom Modern CSS3
@@ -516,10 +512,6 @@ Simply set the `DATABASE_URL` environment variable on your hosting provider, and
 
 ```plaintext
 modern-portfolio/
-│
-├── .github/
-│   └── workflows/
-│       └── ci.yml                     # GitHub Actions CI pipeline
 │
 ├── Areas/
 │   └── Admin/                         # Admin Control Console (CMS)
