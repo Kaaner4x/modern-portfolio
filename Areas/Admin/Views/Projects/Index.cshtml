@@ -1,0 +1,740 @@
+@model List<ProjectListViewModel>
+@{
+    ViewData["Title"] = "Solutions Management";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+
+    var totalCount = Model?.Count ?? 0;
+    var activeCount = Model?.Count(p => p.IsActive) ?? 0;
+    var passiveCount = Model?.Count(p => !p.IsActive) ?? 0;
+    var linkedCount = Model?.Count(p => !string.IsNullOrEmpty(p.GithubUrl) || !string.IsNullOrEmpty(p.ProjectUrl)) ?? 0;
+}
+
+<style>
+    .project-header-icon {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, #009CFF 0%, #0066cc 100%);
+        box-shadow: 0 4px 12px rgba(0, 156, 255, 0.25);
+    }
+    .stat-card {
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    }
+    .stat-icon-wrapper {
+        width: 45px;
+        height: 45px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .project-thumbnail {
+        width: 65px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 8px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .project-thumbnail:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+    }
+    .thumbnail-placeholder {
+        width: 65px;
+        height: 50px;
+        border-radius: 8px;
+        background-color: #f0f4f8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #9fb3c8;
+    }
+    .table th {
+        font-size: 0.78rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: #6c757d;
+        font-weight: 700;
+        background-color: rgba(243, 246, 249, 0.8);
+        border-bottom: 2px solid #e9ecef;
+        padding-top: 14px;
+        padding-bottom: 14px;
+    }
+    .table td {
+        padding-top: 14px;
+        padding-bottom: 14px;
+        vertical-align: middle;
+    }
+    .badge-active {
+        background-color: rgba(25, 135, 84, 0.12);
+        color: #198754;
+        border: 1px solid rgba(25, 135, 84, 0.25);
+    }
+    .badge-passive {
+        background-color: rgba(108, 117, 125, 0.12);
+        color: #6c757d;
+        border: 1px solid rgba(108, 117, 125, 0.25);
+    }
+    .pulse-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 6px;
+    }
+    .pulse-dot.active {
+        background-color: #198754;
+        box-shadow: 0 0 0 2px rgba(25, 135, 84, 0.25);
+    }
+    .pulse-dot.passive {
+        background-color: #6c757d;
+    }
+    .filter-btn.active {
+        background-color: #009CFF !important;
+        color: #ffffff !important;
+        border-color: #009CFF !important;
+    }
+    .action-btn {
+        transition: all 0.2s ease;
+    }
+    .action-btn:hover {
+        transform: translateY(-1px);
+    }
+    .project-grid-card {
+        border-radius: 12px;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        overflow: hidden;
+    }
+    .project-grid-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.09);
+    }
+    .project-card-img {
+        height: 170px;
+        width: 100%;
+        object-fit: cover;
+        background-color: #f8f9fa;
+    }
+    .project-card-placeholder {
+        height: 170px;
+        width: 100%;
+        background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #9fb3c8;
+    }
+</style>
+
+<div class="container-fluid pt-4 px-4">
+    <!-- Header -->
+    <div class="row g-4 mb-4">
+        <div class="col-12">
+            <div class="bg-light rounded p-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 shadow-sm">
+                <div class="d-flex align-items-center">
+                    <div class="project-header-icon text-white rounded-circle me-3 d-flex align-items-center justify-content-center flex-shrink-0">
+                        <i class="fa fa-laptop-code fa-lg"></i>
+                    </div>
+                    <div>
+                        <h4 class="mb-1 text-primary fw-bold">Solutions &amp; Project Portfolio</h4>
+                        <p class="text-muted mb-0 small">Showcase Aveny Technologies' enterprise software platforms, cloud applications, case studies, and code repositories.</p>
+                    </div>
+                </div>
+                <div>
+                    <a asp-area="Admin" asp-controller="Projects" asp-action="Create" class="btn btn-primary rounded-pill px-4 py-2 shadow-sm action-btn">
+                        <i class="fa fa-plus-circle me-2"></i>Publish Solution
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Notifications -->
+    @if (TempData["SuccessMessage"] is not null)
+    {
+        <div class="alert alert-success alert-dismissible fade show rounded-3 shadow-sm border-0 d-flex align-items-center mb-4" role="alert">
+            <i class="fa fa-check-circle fa-lg me-2 text-success"></i>
+            <div>@TempData["SuccessMessage"]</div>
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] is not null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show rounded-3 shadow-sm border-0 d-flex align-items-center mb-4" role="alert">
+            <i class="fa fa-exclamation-triangle fa-lg me-2 text-danger"></i>
+            <div>@TempData["ErrorMessage"]</div>
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Stat Metric Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-light rounded p-4 h-100 stat-card">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="text-muted mb-1 small fw-bold text-uppercase">Total Solutions</p>
+                        <h3 class="mb-0 text-dark fw-bold">@totalCount</h3>
+                    </div>
+                    <div class="stat-icon-wrapper bg-primary bg-opacity-10 text-primary">
+                        <i class="fa fa-folder-open fa-lg"></i>
+                    </div>
+                </div>
+                <div class="mt-3 text-muted small">
+                    <span class="text-primary fw-bold">All</span> enterprise deliverables
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-light rounded p-4 h-100 stat-card">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="text-muted mb-1 small fw-bold text-uppercase">Live / Published</p>
+                        <h3 class="mb-0 text-success fw-bold">@activeCount</h3>
+                    </div>
+                    <div class="stat-icon-wrapper bg-success bg-opacity-10 text-success">
+                        <i class="fa fa-check-circle fa-lg"></i>
+                    </div>
+                </div>
+                <div class="mt-3 text-muted small">
+                    <span class="text-success fw-bold">Visible</span> on public website
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-light rounded p-4 h-100 stat-card">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="text-muted mb-1 small fw-bold text-uppercase">Internal / Draft</p>
+                        <h3 class="mb-0 text-secondary fw-bold">@passiveCount</h3>
+                    </div>
+                    <div class="stat-icon-wrapper bg-secondary bg-opacity-10 text-secondary">
+                        <i class="fa fa-eye-slash fa-lg"></i>
+                    </div>
+                </div>
+                <div class="mt-3 text-muted small">
+                    <span class="text-secondary fw-bold">Hidden</span> from public showcase
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-light rounded p-4 h-100 stat-card">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="text-muted mb-1 small fw-bold text-uppercase">Linked Demos</p>
+                        <h3 class="mb-0 text-info fw-bold">@linkedCount</h3>
+                    </div>
+                    <div class="stat-icon-wrapper bg-info bg-opacity-10 text-info">
+                        <i class="fa fa-link fa-lg"></i>
+                    </div>
+                </div>
+                <div class="mt-3 text-muted small">
+                    <span class="text-info fw-bold">Live &amp; GitHub</span> links configured
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter & Search Toolbar -->
+    <div class="bg-light rounded p-3 mb-4 shadow-sm">
+        <div class="row g-3 align-items-center justify-content-between">
+            <div class="col-12 col-md-5 col-lg-4">
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0 text-muted rounded-start-pill ps-3">
+                        <i class="fa fa-search"></i>
+                    </span>
+                    <input type="text" id="projectSearchInput" class="form-control border-start-0 rounded-end-pill ps-1" placeholder="Search solutions by title or architecture..." />
+                </div>
+            </div>
+
+            <div class="col-12 col-md-7 col-lg-8 d-flex flex-wrap align-items-center justify-content-md-end gap-2">
+                <div class="btn-group rounded-pill overflow-hidden border" role="group">
+                    <button type="button" class="btn btn-sm btn-light filter-btn active px-3 py-2 fw-medium" data-filter="all">
+                        All <span class="badge bg-white text-dark ms-1 rounded-pill">@totalCount</span>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-light filter-btn px-3 py-2 fw-medium" data-filter="active">
+                        Active <span class="badge bg-success text-white ms-1 rounded-pill">@activeCount</span>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-light filter-btn px-3 py-2 fw-medium" data-filter="passive">
+                        Inactive <span class="badge bg-secondary text-white ms-1 rounded-pill">@passiveCount</span>
+                    </button>
+                </div>
+
+                <div class="btn-group rounded-pill overflow-hidden border ms-md-2" role="group">
+                    <button type="button" class="btn btn-sm btn-primary active px-3 py-2" id="btnTableView" title="Table View">
+                        <i class="fa fa-list"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-light px-3 py-2" id="btnGridView" title="Grid / Card View">
+                        <i class="fa fa-th-large"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content: Table & Grid Views -->
+    @if (Model is not null && Model.Any())
+    {
+        <!-- TABLE VIEW -->
+        <div id="tableViewContainer" class="bg-light rounded p-4 shadow-sm mb-4">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0" id="projectsTable">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-center" style="width: 70px;">#ID</th>
+                            <th scope="col" style="min-width: 250px;">SOLUTION DETAILS</th>
+                            <th scope="col" style="min-width: 140px;">STATUS</th>
+                            <th scope="col" style="min-width: 140px;">CHANNELS</th>
+                            <th scope="col" style="min-width: 130px;">RELEASED</th>
+                            <th scope="col" class="text-end" style="min-width: 160px;">ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="projectsTableBody">
+                        @foreach (var project in Model)
+                        {
+                            <tr class="project-item-row" 
+                                data-title="@project.Title.ToLower()" 
+                                data-desc="@((project.Description ?? "").ToLower())" 
+                                data-status="@(project.IsActive ? "active" : "passive")">
+                                
+                                <td class="text-center">
+                                    <span class="badge bg-white text-muted border px-2 py-1 rounded fw-bold">#@project.Id</span>
+                                </td>
+                                
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-3 flex-shrink-0">
+                                            @if (!string.IsNullOrEmpty(project.ImageUrl))
+                                            {
+                                                <img src="@project.ImageUrl" alt="@project.Title" class="project-thumbnail shadow-sm border" 
+                                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                                                <div class="thumbnail-placeholder border" style="display:none;">
+                                                    <i class="fa fa-image fa-lg"></i>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="thumbnail-placeholder border">
+                                                    <i class="fa fa-image fa-lg"></i>
+                                                </div>
+                                            }
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-1 text-dark fw-bold">@project.Title</h6>
+                                            @if (!string.IsNullOrEmpty(project.Description))
+                                            {
+                                                <small class="text-muted d-block text-truncate" style="max-width: 320px;">
+                                                    @project.Description
+                                                </small>
+                                            }
+                                            else
+                                            {
+                                                <small class="text-muted fst-italic">No architectural description provided</small>
+                                            }
+                                        </div>
+                                    </div>
+                                </td>
+                                
+                                <td>
+                                    @if (project.IsActive)
+                                    {
+                                        <span class="badge badge-active rounded-pill px-3 py-2 fw-medium d-inline-flex align-items-center">
+                                            <span class="pulse-dot active"></span> Active
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-passive rounded-pill px-3 py-2 fw-medium d-inline-flex align-items-center">
+                                            <span class="pulse-dot passive"></span> Inactive
+                                        </span>
+                                    }
+                                </td>
+
+                                <td>
+                                    <div class="d-flex align-items-center gap-1">
+                                        @if (!string.IsNullOrEmpty(project.GithubUrl))
+                                        {
+                                            <a href="@project.GithubUrl" target="_blank" rel="noopener noreferrer" 
+                                               class="btn btn-sm btn-outline-dark rounded-circle d-inline-flex align-items-center justify-content-center p-0" 
+                                               style="width: 32px; height: 32px;" title="GitHub Repository">
+                                                <i class="fab fa-github"></i>
+                                            </a>
+                                        }
+                                        @if (!string.IsNullOrEmpty(project.ProjectUrl))
+                                        {
+                                            <a href="@project.ProjectUrl" target="_blank" rel="noopener noreferrer" 
+                                               class="btn btn-sm btn-outline-info rounded-circle d-inline-flex align-items-center justify-content-center p-0" 
+                                               style="width: 32px; height: 32px;" title="Live Platform URL">
+                                                <i class="fa fa-external-link-alt"></i>
+                                            </a>
+                                        }
+                                        @if (string.IsNullOrEmpty(project.GithubUrl) && string.IsNullOrEmpty(project.ProjectUrl))
+                                        {
+                                            <span class="text-muted small fst-italic">-</span>
+                                        }
+                                    </div>
+                                </td>
+                                
+                                <td>
+                                    <span class="text-secondary small">
+                                        <i class="fa fa-calendar-alt me-1 text-muted"></i>@project.CreatedDate
+                                    </span>
+                                </td>
+                                
+                                <td class="text-end">
+                                    <div class="btn-group" role="group">
+                                        <a asp-area="Admin" asp-controller="Projects" asp-action="Edit" asp-route-id="@project.Id" 
+                                           class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 me-1 action-btn" title="Edit Solution">
+                                            <i class="fa fa-edit me-1"></i> Edit
+                                        </a>
+                                        
+                                        <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1 action-btn btn-delete-project"
+                                                data-id="@project.Id" data-title="@project.Title" title="Delete Solution">
+                                            <i class="fa fa-trash-alt me-1"></i> Delete
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- GRID / CARD VIEW -->
+        <div id="gridViewContainer" class="d-none mb-4">
+            <div class="row g-4" id="projectsGridBody">
+                @foreach (var project in Model)
+                {
+                    <div class="col-12 col-md-6 col-xl-4 project-item-grid" 
+                         data-title="@project.Title.ToLower()" 
+                         data-desc="@((project.Description ?? "").ToLower())" 
+                         data-status="@(project.IsActive ? "active" : "passive")">
+                        
+                        <div class="bg-light project-grid-card h-100 d-flex flex-column shadow-sm">
+                            <div class="position-relative">
+                                @if (!string.IsNullOrEmpty(project.ImageUrl))
+                                {
+                                    <img src="@project.ImageUrl" alt="@project.Title" class="project-card-img" 
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                                    <div class="project-card-placeholder" style="display:none;">
+                                        <i class="fa fa-image fa-3x"></i>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="project-card-placeholder">
+                                        <i class="fa fa-image fa-3x"></i>
+                                    </div>
+                                }
+
+                                <div class="position-absolute top-0 end-0 m-3">
+                                    @if (project.IsActive)
+                                    {
+                                        <span class="badge bg-success bg-opacity-90 text-white rounded-pill px-3 py-2 shadow-sm">
+                                            <i class="fa fa-check-circle me-1"></i> Active
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary bg-opacity-90 text-white rounded-pill px-3 py-2 shadow-sm">
+                                            <i class="fa fa-pause-circle me-1"></i> Inactive
+                                        </span>
+                                    }
+                                </div>
+
+                                <div class="position-absolute top-0 start-0 m-3">
+                                    <span class="badge bg-dark bg-opacity-75 text-white rounded px-2 py-1 shadow-sm">
+                                        #@project.Id
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="p-4 flex-grow-1 d-flex flex-column">
+                                <h5 class="fw-bold text-dark mb-2 text-truncate" title="@project.Title">
+                                    @project.Title
+                                </h5>
+                                
+                                <p class="text-muted small mb-3 flex-grow-1" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; min-height: 48px;">
+                                    @(string.IsNullOrEmpty(project.Description) ? "No architectural description provided for this solution." : project.Description)
+                                </p>
+
+                                <div class="d-flex align-items-center justify-content-between pt-3 border-top mt-auto mb-3">
+                                    <span class="text-muted small">
+                                        <i class="fa fa-calendar-alt me-1"></i>@project.CreatedDate
+                                    </span>
+                                    
+                                    <div class="d-flex align-items-center gap-1">
+                                        @if (!string.IsNullOrEmpty(project.GithubUrl))
+                                        {
+                                            <a href="@project.GithubUrl" target="_blank" rel="noopener noreferrer" 
+                                               class="btn btn-sm btn-outline-dark rounded-circle p-0 d-inline-flex align-items-center justify-content-center" 
+                                               style="width: 30px; height: 30px;" title="GitHub Repository">
+                                                <i class="fab fa-github"></i>
+                                            </a>
+                                        }
+                                        @if (!string.IsNullOrEmpty(project.ProjectUrl))
+                                        {
+                                            <a href="@project.ProjectUrl" target="_blank" rel="noopener noreferrer" 
+                                               class="btn btn-sm btn-outline-info rounded-circle p-0 d-inline-flex align-items-center justify-content-center" 
+                                               style="width: 30px; height: 30px;" title="Live Platform URL">
+                                                <i class="fa fa-external-link-alt"></i>
+                                            </a>
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="d-flex gap-2">
+                                    <a asp-area="Admin" asp-controller="Projects" asp-action="Edit" asp-route-id="@project.Id" 
+                                       class="btn btn-outline-primary btn-sm rounded-pill flex-fill action-btn py-2">
+                                        <i class="fa fa-edit me-1"></i> Edit
+                                    </a>
+                                    
+                                    <button type="button" class="btn btn-outline-danger btn-sm rounded-pill flex-fill action-btn py-2 btn-delete-project"
+                                            data-id="@project.Id" data-title="@project.Title">
+                                        <i class="fa fa-trash-alt me-1"></i> Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- No Filter Results State -->
+        <div id="noResultsState" class="bg-light rounded p-5 text-center shadow-sm d-none mb-4">
+            <div class="mb-3 text-muted">
+                <i class="fa fa-search fa-3x opacity-50"></i>
+            </div>
+            <h5 class="fw-bold text-dark">No Matching Solutions Found</h5>
+            <p class="text-muted small mb-3">No solutions matched your search criteria or selected filter.</p>
+            <button type="button" id="btnResetFilters" class="btn btn-outline-primary btn-sm rounded-pill px-4 py-2">
+                <i class="fa fa-undo me-1"></i> Reset Filters
+            </button>
+        </div>
+    }
+    else
+    {
+        <!-- Empty State -->
+        <div class="bg-light rounded p-5 text-center shadow-sm mb-4">
+            <div class="mb-4">
+                <div class="btn-square bg-primary bg-opacity-10 text-primary rounded-circle mx-auto d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                    <i class="fa fa-folder-open fa-2x"></i>
+                </div>
+            </div>
+            <h4 class="fw-bold text-dark mb-2">No Solutions Published Yet</h4>
+            <p class="text-muted mb-4 mx-auto" style="max-width: 480px;">
+                Showcase Aveny Technologies' software platforms, microservices, cloud applications, and client case studies.
+            </p>
+            <a asp-area="Admin" asp-controller="Projects" asp-action="Create" class="btn btn-primary rounded-pill px-4 py-2 shadow-sm action-btn">
+                <i class="fa fa-plus-circle me-2"></i>Publish First Solution
+            </a>
+        </div>
+    }
+</div>
+
+<!-- Modern Delete Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0 pb-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center px-4 pb-4">
+                <div class="btn-square bg-danger bg-opacity-10 text-danger rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 65px; height: 65px;">
+                    <i class="fa fa-trash-alt fa-2x"></i>
+                </div>
+                <h5 class="modal-title fw-bold text-dark mb-2" id="deleteConfirmModalLabel">Delete Solution?</h5>
+                <p class="text-muted small mb-1">Are you sure you want to permanently delete this solution entry from Aveny's portfolio?</p>
+                <div class="p-3 bg-light rounded-3 my-3">
+                    <span class="fw-bold text-danger" id="deleteProjectTitleText"></span>
+                </div>
+            </div>
+            <div class="modal-footer border-0 pt-0 d-flex justify-content-center gap-2 pb-4">
+                <button type="button" class="btn btn-light rounded-pill px-4 py-2" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteProjectForm" asp-area="Admin" asp-controller="Projects" asp-action="Delete" method="post" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" id="deleteProjectIdInput" value="" />
+                    <button type="submit" class="btn btn-danger rounded-pill px-4 py-2 shadow-sm">
+                        <i class="fa fa-trash-alt me-1"></i> Yes, Delete
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('projectSearchInput');
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const tableRows = document.querySelectorAll('.project-item-row');
+            const gridCards = document.querySelectorAll('.project-item-grid');
+            const noResultsState = document.getElementById('noResultsState');
+            const btnResetFilters = document.getElementById('btnResetFilters');
+
+            const btnTableView = document.getElementById('btnTableView');
+            const btnGridView = document.getElementById('btnGridView');
+            const tableViewContainer = document.getElementById('tableViewContainer');
+            const gridViewContainer = document.getElementById('gridViewContainer');
+
+            let currentFilter = 'all';
+            let searchQuery = '';
+
+            function applyFilters() {
+                let visibleCount = 0;
+
+                tableRows.forEach(row => {
+                    const title = row.getAttribute('data-title') || '';
+                    const desc = row.getAttribute('data-desc') || '';
+                    const status = row.getAttribute('data-status') || '';
+
+                    const matchesSearch = !searchQuery || title.includes(searchQuery) || desc.includes(searchQuery);
+                    const matchesStatus = currentFilter === 'all' || status === currentFilter;
+
+                    if (matchesSearch && matchesStatus) {
+                        row.style.display = '';
+                        visibleCount++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+
+                gridCards.forEach(card => {
+                    const title = card.getAttribute('data-title') || '';
+                    const desc = card.getAttribute('data-desc') || '';
+                    const status = card.getAttribute('data-status') || '';
+
+                    const matchesSearch = !searchQuery || title.includes(searchQuery) || desc.includes(searchQuery);
+                    const matchesStatus = currentFilter === 'all' || status === currentFilter;
+
+                    if (matchesSearch && matchesStatus) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                if (noResultsState) {
+                    if (visibleCount === 0 && (tableRows.length > 0 || gridCards.length > 0)) {
+                        noResultsState.classList.remove('d-none');
+                        if (tableViewContainer) tableViewContainer.classList.add('d-none');
+                        if (gridViewContainer) gridViewContainer.classList.add('d-none');
+                    } else {
+                        noResultsState.classList.add('d-none');
+                        const isGridActive = btnGridView && btnGridView.classList.contains('btn-primary');
+                        if (isGridActive) {
+                            if (gridViewContainer) gridViewContainer.classList.remove('d-none');
+                            if (tableViewContainer) tableViewContainer.classList.add('d-none');
+                        } else {
+                            if (tableViewContainer) tableViewContainer.classList.remove('d-none');
+                            if (gridViewContainer) gridViewContainer.classList.add('d-none');
+                        }
+                    }
+                }
+            }
+
+            if (searchInput) {
+                searchInput.addEventListener('input', function (e) {
+                    searchQuery = e.target.value.toLowerCase().trim();
+                    applyFilters();
+                });
+            }
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.getAttribute('data-filter');
+                    applyFilters();
+                });
+            });
+
+            if (btnResetFilters) {
+                btnResetFilters.addEventListener('click', function () {
+                    if (searchInput) searchInput.value = '';
+                    searchQuery = '';
+                    currentFilter = 'all';
+                    filterBtns.forEach(b => {
+                        if (b.getAttribute('data-filter') === 'all') {
+                            b.classList.add('active');
+                        } else {
+                            b.classList.remove('active');
+                        }
+                    });
+                    applyFilters();
+                });
+            }
+
+            function setViewMode(mode) {
+                if (!btnGridView || !btnTableView) return;
+                if (mode === 'grid') {
+                    btnGridView.classList.add('active', 'btn-primary');
+                    btnGridView.classList.remove('btn-light');
+                    btnTableView.classList.remove('active', 'btn-primary');
+                    btnTableView.classList.add('btn-light');
+
+                    if (!noResultsState || noResultsState.classList.contains('d-none')) {
+                        if (gridViewContainer) gridViewContainer.classList.remove('d-none');
+                        if (tableViewContainer) tableViewContainer.classList.add('d-none');
+                    }
+                    localStorage.setItem('admin_project_view_mode', 'grid');
+                } else {
+                    btnTableView.classList.add('active', 'btn-primary');
+                    btnTableView.classList.remove('btn-light');
+                    btnGridView.classList.remove('active', 'btn-primary');
+                    btnGridView.classList.add('btn-light');
+
+                    if (!noResultsState || noResultsState.classList.contains('d-none')) {
+                        if (tableViewContainer) tableViewContainer.classList.remove('d-none');
+                        if (gridViewContainer) gridViewContainer.classList.add('d-none');
+                    }
+                    localStorage.setItem('admin_project_view_mode', 'table');
+                }
+            }
+
+            if (btnTableView && btnGridView) {
+                btnTableView.addEventListener('click', function () {
+                    setViewMode('table');
+                });
+                btnGridView.addEventListener('click', function () {
+                    setViewMode('grid');
+                });
+
+                const savedMode = localStorage.getItem('admin_project_view_mode') || 'table';
+                setViewMode(savedMode);
+            }
+
+            const deleteModalEl = document.getElementById('deleteConfirmModal');
+            let deleteModal = null;
+            if (deleteModalEl && typeof bootstrap !== 'undefined') {
+                deleteModal = new bootstrap.Modal(deleteModalEl);
+            }
+
+            document.querySelectorAll('.btn-delete-project').forEach(button => {
+                button.addEventListener('click', function () {
+                    const projectId = this.getAttribute('data-id');
+                    const projectTitle = this.getAttribute('data-title');
+
+                    document.getElementById('deleteProjectIdInput').value = projectId;
+                    document.getElementById('deleteProjectTitleText').textContent = projectTitle;
+
+                    if (deleteModal) {
+                        deleteModal.show();
+                    } else {
+                        if (confirm(`Are you sure you want to delete "${projectTitle}"?`)) {
+                            document.getElementById('deleteProjectForm').submit();
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

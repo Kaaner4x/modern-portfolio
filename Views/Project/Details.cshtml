@@ -1,0 +1,106 @@
+@model ProjectViewModel
+@{
+    ViewData["Title"] = $"{Model.Title} - Solution Details";
+}
+
+<main class="main">
+    <!-- Page Title / Breadcrumbs -->
+    <div class="page-title light-background py-4">
+        <div class="container d-lg-flex justify-content-between align-items-center">
+            <h1 class="mb-2 mb-lg-0 fw-bold">@Model.Title</h1>
+            <nav class="breadcrumbs">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="Project" asp-action="Index">Solutions</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Details</li>
+                </ol>
+            </nav>
+        </div>
+    </div><!-- End Page Title -->
+
+    <!-- Portfolio Details Section -->
+    <section id="portfolio-details" class="portfolio-details section py-5">
+        <div class="container" data-aos="fade-up">
+            <div class="row gy-4">
+                <!-- Project Image / Preview Column -->
+                <div class="col-lg-8">
+                    <div class="portfolio-details-slider swiper init-swiper shadow-sm rounded-3 overflow-hidden border">
+                        <img src="@Model.ImageUrl" alt="@Model.Title" class="img-fluid w-100 object-fit-cover" style="max-height: 520px; min-height: 320px;" />
+                    </div>
+
+                    <div class="mt-4 p-4 bg-light rounded-3 shadow-sm">
+                        <h3 class="fw-bold text-dark mb-3">Architectural &amp; System Overview</h3>
+                        <p class="lead fs-6 text-muted mb-0" style="line-height: 1.8;">
+                            @(string.IsNullOrEmpty(Model.Description) ? "Detailed technical specifications and architecture design for this enterprise solution are managed by Aveny Technologies." : Model.Description)
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Project Info Sidebar Column -->
+                <div class="col-lg-4">
+                    <div class="portfolio-info bg-light p-4 rounded-3 shadow-sm mb-4">
+                        <h3 class="fw-bold text-primary mb-3 pb-2 border-bottom">Solution Information</h3>
+                        <ul class="list-unstyled mb-4">
+                            <li class="mb-3 d-flex align-items-center">
+                                <strong class="text-dark me-2" style="min-width: 110px;"><i class="bi bi-tag text-primary me-2"></i>Category:</strong>
+                                <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill">Enterprise Software</span>
+                            </li>
+                            <li class="mb-3 d-flex align-items-center">
+                                <strong class="text-dark me-2" style="min-width: 110px;"><i class="bi bi-building text-primary me-2"></i>Provider:</strong>
+                                <span class="text-muted">Aveny Technologies</span>
+                            </li>
+                            <li class="mb-3 d-flex align-items-center">
+                                <strong class="text-dark me-2" style="min-width: 110px;"><i class="bi bi-calendar3 text-primary me-2"></i>Release Date:</strong>
+                                <span class="text-muted">@Model.CreatedAt.ToString("MMMM dd, yyyy")</span>
+                            </li>
+                            @if (!string.IsNullOrEmpty(Model.ProjectUrl))
+                            {
+                                <li class="mb-3 d-flex align-items-center">
+                                    <strong class="text-dark me-2" style="min-width: 110px;"><i class="bi bi-globe text-primary me-2"></i>Live Demo:</strong>
+                                    <a href="@Model.ProjectUrl" target="_blank" rel="noopener noreferrer" class="text-primary text-truncate" style="max-width: 180px;">
+                                        @Model.ProjectUrl
+                                    </a>
+                                </li>
+                            }
+                            @if (!string.IsNullOrEmpty(Model.GithubUrl))
+                            {
+                                <li class="mb-3 d-flex align-items-center">
+                                    <strong class="text-dark me-2" style="min-width: 110px;"><i class="bi bi-github text-primary me-2"></i>Repository:</strong>
+                                    <a href="@Model.GithubUrl" target="_blank" rel="noopener noreferrer" class="text-dark text-truncate" style="max-width: 180px;">
+                                        @Model.GithubUrl
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+
+                        <div class="d-grid gap-2">
+                            @if (!string.IsNullOrEmpty(Model.ProjectUrl))
+                            {
+                                <a href="@Model.ProjectUrl" target="_blank" rel="noopener noreferrer" class="btn btn-primary rounded-pill py-2 shadow-sm">
+                                    <i class="bi bi-box-arrow-up-right me-2"></i>Visit Live Platform
+                                </a>
+                            }
+                            @if (!string.IsNullOrEmpty(Model.GithubUrl))
+                            {
+                                <a href="@Model.GithubUrl" target="_blank" rel="noopener noreferrer" class="btn btn-outline-dark rounded-pill py-2">
+                                    <i class="bi bi-github me-2"></i>View Source Code
+                                </a>
+                            }
+                            <a asp-controller="Project" asp-action="Index" class="btn btn-outline-secondary rounded-pill py-2 mt-2">
+                                <i class="bi bi-arrow-left me-2"></i>Back to Solutions
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-light rounded-3 shadow-sm">
+                        <h5 class="fw-bold text-dark mb-2">Need a custom enterprise solution?</h5>
+                        <p class="text-muted small mb-3">Our team of solution architects at Aveny Technologies can engineer scalable architectures tailored to your requirements.</p>
+                        <a asp-controller="Home" asp-action="Contact" class="btn btn-outline-primary btn-sm rounded-pill w-100 py-2">
+                            <i class="bi bi-chat-dots me-1"></i>Contact Engineering Team
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section><!-- /Portfolio Details Section -->
+</main>

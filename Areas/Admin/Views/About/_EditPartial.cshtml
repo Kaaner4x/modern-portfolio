@@ -1,0 +1,190 @@
+@model AboutEditViewModel
+
+<div class="row g-4">
+    <!-- Preview / Profile Card Column -->
+    <div class="col-12 col-xl-4">
+        <div class="bg-light rounded p-4 h-100 shadow-sm text-center">
+            <div class="position-relative d-inline-block mb-3">
+                @if (!string.IsNullOrEmpty(Model.CurrentImageUrl))
+                {
+                    <img id="currentPhotoDisplay" src="@Model.CurrentImageUrl" alt="@Model.Title" class="rounded-circle shadow border border-3 border-white object-fit-cover" style="width: 140px; height: 140px;" />
+                }
+                else
+                {
+                    <div class="btn-square bg-primary bg-opacity-10 text-primary rounded-circle mx-auto d-flex align-items-center justify-content-center shadow-sm" style="width: 140px; height: 140px;">
+                        <i class="fa fa-building fa-4x"></i>
+                    </div>
+                }
+            </div>
+
+            <h5 class="fw-bold text-dark mb-1">Aveny Technologies</h5>
+            <p class="text-primary small fw-semibold mb-2">@Model.Title</p>
+            <p class="text-muted small mb-3">
+                <i class="fa fa-map-marker-alt me-1 text-primary"></i>@(string.IsNullOrEmpty(Model.City) ? "San Francisco, CA" : Model.City)
+            </p>
+
+            <div class="bg-white rounded-3 p-3 text-start shadow-sm mb-3">
+                <div class="d-flex align-items-center mb-2">
+                    <i class="fa fa-envelope text-primary me-2" style="width: 20px;"></i>
+                    <span class="small text-truncate">@(string.IsNullOrEmpty(Model.Email) ? "contact@avenytechnologies.com" : Model.Email)</span>
+                </div>
+                <div class="d-flex align-items-center mb-2">
+                    <i class="fa fa-phone text-success me-2" style="width: 20px;"></i>
+                    <span class="small">@(string.IsNullOrEmpty(Model.PhoneNumber) ? "+1 (800) 555-AVENY" : Model.PhoneNumber)</span>
+                </div>
+                <div class="d-flex align-items-center">
+                    <i class="fa fa-calendar-alt text-warning me-2" style="width: 20px;"></i>
+                    <span class="small">@(Model.Age > 0 ? $"{Model.Age}+ Years in Industry" : "Industry Leadership")</span>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center gap-2">
+                @if (!string.IsNullOrEmpty(Model.GithubUrl))
+                {
+                    <a href="@Model.GithubUrl" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-dark rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 38px; height: 38px;" title="Aveny GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                }
+                @if (!string.IsNullOrEmpty(Model.LinkedInUrl))
+                {
+                    <a href="@Model.LinkedInUrl" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-primary rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 38px; height: 38px;" title="Aveny LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Form Column -->
+    <div class="col-12 col-xl-8">
+        <div class="bg-light rounded p-4 shadow-sm">
+            <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
+                <div class="btn-square bg-warning bg-opacity-10 text-warning rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+                    <i class="fa fa-edit fa-lg"></i>
+                </div>
+                <div>
+                    <h5 class="mb-0 fw-bold text-dark">Update Corporate Profile</h5>
+                    <small class="text-muted">Modify company headline, overview, headquarters, and enterprise channels</small>
+                </div>
+            </div>
+
+            <form asp-area="Admin" asp-controller="About" asp-action="Edit" method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="CurrentImageUrl" />
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-3 mb-4" role="alert"></div>
+
+                <div class="row g-3">
+                    <!-- Title -->
+                    <div class="col-12">
+                        <label asp-for="Title" class="form-label fw-bold">Company Headline / Mission Title</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white"><i class="fa fa-heading text-muted"></i></span>
+                            <input asp-for="Title" class="form-control" placeholder="e.g. Enterprise Software Engineering & Intelligent Cloud Architectures" />
+                        </div>
+                        <span asp-validation-for="Title" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="col-12">
+                        <label asp-for="Description" class="form-label fw-bold">Company Overview &amp; Mission Statement</label>
+                        <textarea asp-for="Description" class="form-control" rows="5" placeholder="Explain Aveny Technologies' vision, core strengths, cloud architectures, and client value proposition..."></textarea>
+                        <span asp-validation-for="Description" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Age & City -->
+                    <div class="col-md-6">
+                        <label asp-for="Age" class="form-label fw-bold">Years of Industry Experience</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white"><i class="fa fa-calendar-alt text-muted"></i></span>
+                            <input asp-for="Age" type="number" class="form-control" placeholder="e.g. 6" />
+                        </div>
+                        <span asp-validation-for="Age" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="City" class="form-label fw-bold">Headquarters / Global Hubs</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white"><i class="fa fa-map-marker-alt text-muted"></i></span>
+                            <input asp-for="City" class="form-control" placeholder="e.g. San Francisco, CA & Global Remote" />
+                        </div>
+                        <span asp-validation-for="City" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Email & Phone -->
+                    <div class="col-md-6">
+                        <label asp-for="Email" class="form-label fw-bold">Corporate Email Address</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white"><i class="fa fa-envelope text-muted"></i></span>
+                            <input asp-for="Email" type="email" class="form-control" placeholder="contact@avenytechnologies.com" />
+                        </div>
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="PhoneNumber" class="form-label fw-bold">Enterprise Phone / Hotline</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white"><i class="fa fa-phone text-muted"></i></span>
+                            <input asp-for="PhoneNumber" class="form-control" placeholder="+1 (800) 555-AVENY" />
+                        </div>
+                        <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                    </div>
+
+                    <!-- GitHub & LinkedIn -->
+                    <div class="col-md-6">
+                        <label asp-for="GithubUrl" class="form-label fw-bold">Organization GitHub URL</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white"><i class="fab fa-github text-muted"></i></span>
+                            <input asp-for="GithubUrl" class="form-control" placeholder="https://github.com/aveny-technologies" />
+                        </div>
+                        <span asp-validation-for="GithubUrl" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="LinkedInUrl" class="form-label fw-bold">Company LinkedIn URL</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white"><i class="fab fa-linkedin text-muted"></i></span>
+                            <input asp-for="LinkedInUrl" class="form-control" placeholder="https://linkedin.com/company/aveny-technologies" />
+                        </div>
+                        <span asp-validation-for="LinkedInUrl" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Image Upload -->
+                    <div class="col-12">
+                        <label asp-for="ImageFile" class="form-label fw-bold">Change Brand / Profile Image</label>
+                        <input asp-for="ImageFile" type="file" class="form-control" accept=".jpg,.jpeg,.png,.webp,.gif" onchange="previewAboutEditImage(this)" />
+                        <div class="form-text">Leave blank to keep current image. Supported formats: JPG, PNG, WEBP, GIF (Max: 5MB).</div>
+                        <span asp-validation-for="ImageFile" class="text-danger small"></span>
+
+                        <div id="aboutEditImagePreviewContainer" class="mt-3 d-none">
+                            <p class="small text-muted mb-1 fw-bold">New Image Preview:</p>
+                            <img id="aboutEditImagePreview" src="#" alt="New Preview" class="img-thumbnail rounded-3 shadow-sm" style="max-height: 180px;" />
+                        </div>
+                    </div>
+
+                    <!-- Submit Buttons -->
+                    <div class="col-12 mt-4 pt-2 border-top d-flex gap-2">
+                        <button type="submit" class="btn btn-primary rounded-pill px-4 py-2 shadow-sm">
+                            <i class="fa fa-save me-2"></i>Update Company Profile
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function previewAboutEditImage(input) {
+        const previewContainer = document.getElementById('aboutEditImagePreviewContainer');
+        const previewImg = document.getElementById('aboutEditImagePreview');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                previewImg.src = e.target.result;
+                previewContainer.classList.remove('d-none');
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>

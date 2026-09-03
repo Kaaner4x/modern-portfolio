@@ -1,6 +1,6 @@
 @model AboutSkillsViewModel
 @{
-    ViewData["Title"] = "About";
+    ViewData["Title"] = "About Us";
     int i = 0;
 }
 
@@ -9,43 +9,43 @@
 
     <!-- Section Title -->
     <div class="container section-title" data-aos="fade-up">
-        <h2>About Me</h2>
-        <p>A glimpse into my professional journey, passion for software engineering, and technical background.</p>
+        <h2>About Aveny Technologies</h2>
+        <p>Architecting robust, cloud-native enterprise platforms and high-velocity digital solutions.</p>
     </div><!-- End Section Title -->
 
     <div class="container" data-aos="fade-up" data-aos-delay="100">
 
         <div class="row gy-4 justify-content-center">
             <div class="col-lg-4">
-                <img src="@(string.IsNullOrEmpty(Model.About?.ImageUrl) ? "/ui/img/profile-img.jpg" : Model.About?.ImageUrl)" class="img-fluid rounded" alt="@(Model.About?.Title ?? "Profile Picture")">
+                <img src="@(string.IsNullOrEmpty(Model.About?.ImageUrl) ? "/ui/img/profile-img.jpg" : Model.About?.ImageUrl)" class="img-fluid rounded shadow-sm" alt="Aveny Technologies">
             </div>
             <div class="col-lg-8 content">
-                <h2>@(Model.About?.Title ?? "Software Developer & Problem Solver")</h2>
+                <h2>@(Model.About?.Title ?? "Enterprise Software Engineering & Cloud Solutions")</h2>
                 <p class="fst-italic py-2 mb-3">
-                    @(Model.About?.Description ?? "Passionate software engineer focused on designing and building scalable web applications.")
+                    @(Model.About?.Description ?? "Aveny Technologies is an innovative software engineering and technology consulting company. We architect robust cloud-native platforms, high-throughput distributed microservices, and AI-driven digital ecosystems that empower forward-thinking enterprises worldwide.")
                 </p>
                 <div class="row">
                     <div class="col-lg-6">
                         <ul>
-                            <li><i class="bi bi-chevron-right"></i> <strong>Age:</strong> <span>@Model.About?.Age</span></li>
-                            <li><i class="bi bi-chevron-right"></i> <strong>Email:</strong>
-                                <a href="mailto:@Model.About?.Email"><span>@Model.About?.Email</span></a>
+                            <li><i class="bi bi-chevron-right"></i> <strong>Industry Experience:</strong> <span>@(Model.About?.Age > 0 ? $"{Model.About?.Age}+ Years of Engineering Excellence" : "6+ Years of Industry Leadership")</span></li>
+                            <li><i class="bi bi-chevron-right"></i> <strong>Corporate Email:</strong>
+                                <a href="mailto:@(Model.About?.Email ?? "contact@avenytechnologies.com")"><span>@(Model.About?.Email ?? "contact@avenytechnologies.com")</span></a>
                             </li>
-                            <li><i class="bi bi-chevron-right"></i> <strong>Location:</strong>
-                                <span>@Model.About?.City</span>
+                            <li><i class="bi bi-chevron-right"></i> <strong>Headquarters:</strong>
+                                <span>@(Model.About?.City ?? "San Francisco, CA & Global Hubs")</span>
                             </li>
                         </ul>
                     </div>
                     <div class="col-lg-6">
                         <ul>
-                            <li><i class="bi bi-chevron-right"></i> <strong>GitHub:</strong>
-                                <a href="@Model.About?.GithubUrl" target="_blank" rel="noopener noreferrer"><span>@Model.About?.GithubUrl</span></a>
+                            <li><i class="bi bi-chevron-right"></i> <strong>Open Source:</strong>
+                                <a href="@(Model.About?.GithubUrl ?? "https://github.com")" target="_blank" rel="noopener noreferrer"><span>@(Model.About?.GithubUrl ?? "https://github.com")</span></a>
                             </li>
                             <li><i class="bi bi-chevron-right"></i> <strong>LinkedIn:</strong>
-                                <a href="@Model.About?.LinkedInUrl" target="_blank" rel="noopener noreferrer"><span>@Model.About?.LinkedInUrl</span></a>
+                                <a href="@(Model.About?.LinkedInUrl ?? "https://linkedin.com")" target="_blank" rel="noopener noreferrer"><span>@(Model.About?.LinkedInUrl ?? "https://linkedin.com")</span></a>
                             </li>
-                            <li><i class="bi bi-chevron-right"></i> <strong>Phone:</strong>
-                                <a href="tel:@Model.About?.PhoneNumber"><span>@Model.About?.PhoneNumber</span></a>
+                            <li><i class="bi bi-chevron-right"></i> <strong>Phone / Hotline:</strong>
+                                <a href="tel:@(Model.About?.PhoneNumber ?? "+180055528369")"><span>@(Model.About?.PhoneNumber ?? "+1 (800) 555-AVENY")</span></a>
                             </li>
                         </ul>
                     </div>
@@ -62,16 +62,17 @@
 
     <!-- Section Title -->
     <div class="container section-title" data-aos="fade-up">
-        <h2>Skills &amp; Expertise</h2>
-        <p>A comprehensive overview of my technical capabilities, programming proficiencies, and modern development toolsets.</p>
+        <h2>Technology Stack &amp; Core Competencies</h2>
+        <p>A comprehensive overview of our engineering proficiencies, cloud architectures, and modern technology toolsets.</p>
     </div><!-- End Section Title -->
 
     <div class="container" data-aos="fade-up" data-aos-delay="100">
 
         <div class="row skills-content skills-animation">
             @{
-                int rightCount = Model.GetSkillsCount() / 2;
-                int leftCount = Model.GetSkillsCount() - rightCount;
+                int skillCount = Model.GetSkillsCount();
+                int rightCount = skillCount / 2;
+                int leftCount = skillCount - rightCount;
             }
             <div class="col-lg-6">
                 @for (i = 0; i < leftCount; i++)
@@ -88,7 +89,7 @@
             </div>
 
             <div class="col-lg-6">
-                @for (int j = i; j < Model.Skills.Count; j++)
+                @for (int j = i; j < skillCount; j++)
                 {
                     <div class="progress">
                         <span class="skill"><span>@Model.Skills[j].Name</span> <i

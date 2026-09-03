@@ -1,20 +1,23 @@
-﻿@model HomeViewModel
+@model HomeViewModel
 
 @{
-  ViewData["Title"] = "Home";
+  ViewData["Title"] = "Innovate & Scale with Next-Gen Engineering";
 }
 
 <!-- Hero Section -->
 <section id="hero" class="hero section">
 
-  <img src="~/ui/img/hero-bg.jpg" alt="" data-aos="fade-in">
+  <img src="~/ui/img/hero-bg.jpg" alt="Aveny Technologies" data-aos="fade-in">
 
   <div class="container text-center" data-aos="zoom-out" data-aos-delay="100">
     <div class="row justify-content-center">
-      <div class="col-lg-8">
-        <h2>@Model.About?.Title</h2>
-        <p>@Model.About?.Description</p>
-        <a asp-controller="Home" asp-action="About" class="btn-get-started">About Me</a>
+      <div class="col-lg-9">
+        <h2 class="display-4 fw-bold">@(string.IsNullOrEmpty(Model.About?.Title) ? "Aveny Technologies" : Model.About.Title)</h2>
+        <p class="lead">@(string.IsNullOrEmpty(Model.About?.Description) ? "Engineering next-generation digital platforms, cloud-native architectures, and intelligent software ecosystems for forward-thinking enterprises." : Model.About.Description)</p>
+        <div class="d-flex justify-content-center gap-3 mt-4">
+          <a asp-controller="Project" asp-action="Index" class="btn-get-started">Explore Solutions</a>
+          <a asp-controller="Home" asp-action="About" class="btn-get-started" style="background: transparent; border: 2px solid #fff;">About Us</a>
+        </div>
       </div>
     </div>
   </div>
@@ -26,56 +29,77 @@
 
   <!-- Section Title -->
   <div class="container section-title" data-aos="fade-up">
-    <h2>Testimonials</h2>
-    <p>These are comment from our customers</p>
+    <h2>Client Endorsements</h2>
+    <p>What global technology leaders and enterprise partners say about partnering with Aveny Technologies.</p>
   </div><!-- End Section Title -->
 
   <div class="container" data-aos="fade-up" data-aos-delay="100">
 
     <div class="swiper init-swiper">
       <script type="application/json" class="swiper-config">
-                        {
-                          "loop": true,
-                          "speed": 600,
-                          "autoplay": {
-                            "delay": 5000
-                          },
-                          "slidesPerView": "auto",
-                          "pagination": {
-                            "el": ".swiper-pagination",
-                            "type": "bullets",
-                            "clickable": true
-                          }
-                        }
+        {
+          "loop": true,
+          "speed": 600,
+          "autoplay": {
+            "delay": 5000
+          },
+          "slidesPerView": "auto",
+          "pagination": {
+            "el": ".swiper-pagination",
+            "type": "bullets",
+            "clickable": true
+          }
+        }
       </script>
       <div class="swiper-wrapper">
 
-        @foreach (var testimonial in @Model.Testimonials)
+        @if (Model.Testimonials != null && Model.Testimonials.Any())
         {
-          <div class="swiper-slide">
-            <div class="testimonial-item">
-              <img src="~/@testimonial.ClientImageUrl" class="testimonial-img" alt="">
-              <h3>@testimonial.ClientName</h3>
-              <h4>@testimonial.ClientPosition</h4>
-              <div class="stars">
-                @for (int i = 0; i < testimonial.Rating; i++)
-                {
-                  <i class="bi bi-star-fill"></i>
-                }
-              </div>
-              <p>
-                <i class="bi bi-quote quote-icon-left"></i>
-                <span>@testimonial.Comment</span>
+          @foreach (var testimonial in Model.Testimonials)
+          {
+            <div class="swiper-slide">
+              <div class="testimonial-item">
+                <img src="@(string.IsNullOrEmpty(testimonial.ClientImageUrl) ? "/ui/img/testimonials/testimonials-1.jpg" : (testimonial.ClientImageUrl.StartsWith("/") ? testimonial.ClientImageUrl : "/" + testimonial.ClientImageUrl))" class="testimonial-img" alt="@testimonial.ClientName">
+                <h3>@testimonial.ClientName</h3>
+                <h4>@testimonial.ClientPosition</h4>
+                <div class="stars">
+                  @for (int i = 0; i < testimonial.Rating; i++)
+                  {
+                    <i class="bi bi-star-fill"></i>
+                  }
+                </div>
+                <p>
+                  <i class="bi bi-quote quote-icon-left"></i>
+                  <span>@testimonial.Comment</span>
                   <i class="bi bi-quote quote-icon-right"></i>
                 </p>
               </div>
             </div>
           }
+        }
+        else
+        {
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <img src="/ui/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt="Sarah Jenkins">
+              <h3>Sarah Jenkins</h3>
+              <h4>VP of Engineering, CloudScale Global</h4>
+              <div class="stars">
+                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+              </div>
+              <p>
+                <i class="bi bi-quote quote-icon-left"></i>
+                <span>Aveny Technologies delivered our core microservices platform ahead of schedule with unmatched performance, scalability, and engineering quality.</span>
+                <i class="bi bi-quote quote-icon-right"></i>
+              </p>
+            </div>
+          </div>
+        }
 
-        </div>
-        <div class="swiper-pagination"></div>
       </div>
-
+      <div class="swiper-pagination"></div>
     </div>
 
-  </section><!-- /Testimonials Section -->
+  </div>
+
+</section><!-- /Testimonials Section -->

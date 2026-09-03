@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.HttpOverrides;
 using ModernPortfolio.Repositories.@abstract;
 using ModernPortfolio.Repositories.concrete;
 using ModernPortfolio.Services.@abstract;
@@ -6,7 +7,17 @@ using ModernPortfolio.Services.concrete;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// IoC (Inversion of Control) konteynerine Controller ve View desteği (MVC) sunan servisleri ekler.
+// Handle Cloud Provider DATABASE_URL environment variable if provided (e.g. Render / Railway / Supabase / Neon)
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+if (!string.IsNullOrEmpty(databaseUrl) && (databaseUrl.StartsWith("postgres://") || databaseUrl.StartsWith("postgresql://")))
+{
+    var uri = new Uri(databaseUrl);
+    var userInfo = uri.UserInfo.Split(':');
+    var npgsqlConnectionString = $"Host={uri.Host};Port={(uri.Port > 0 ? uri.Port : 5432)};Database={uri.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={(userInfo.Length > 1 ? userInfo[1] : "")};SSL Mode=Require;Trust Server Certificate=true;";
+    builder.Configuration["ConnectionStrings:DefaultConnection"] = npgsqlConnectionString;
+}
+
+// IoC (Inversion of Control) controller & view services
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -21,7 +32,15 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.ExpireTimeSpan = TimeSpan.FromDays(7);
     });
 
+// Configure Forwarded Headers for reverse proxy hosting (Render, Railway, Cloudflare, NGINX)
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownIPNetworks.Clear();
+    options.KnownProxies.Clear();
+});
 
+// Repositories
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<ISkillRepository, SkillRepository>();
 builder.Services.AddScoped<IAboutRepository, AboutRepository>();
@@ -29,6 +48,7 @@ builder.Services.AddScoped<ITestimonialRepository, TestimonialRepository>();
 builder.Services.AddScoped<IContactRepository, ContactRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
+// Services
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<ISkillService, SkillService>();
 builder.Services.AddScoped<IAboutService, AboutService>();
@@ -36,37 +56,25 @@ builder.Services.AddScoped<ITestimonialService, TestimonialService>();
 builder.Services.AddScoped<IContactService, ContactService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserSeedService, UserSeedService>();
+builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<IDatabaseInitializerService, DatabaseInitializerService>();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-// Uygulama (WebApplication) nesnesini derleyip oluşturur. 
-// Bu adımdan sonra servis kayıt aşaması biter ve HTTP istek boru hattı (Middleware Pipeline) yapılandırmasına geçilir.
 var app = builder.Build();
 
-// HTTP istek boru hattının (Middleware Pipeline) yapılandırılması.
-// Uygulama Geliştirme (Development) ortamında çalışmıyorsa (örn. Canlı/Production ortamında):
+app.UseForwardedHeaders();
+
 if (!app.Environment.IsDevelopment())
 {
-    // İstekler sırasında oluşabilecek işlenmemiş hataları yakalayarak kullanıcıyı "/Home/Error" sayfasına yönlendirir.
     app.UseExceptionHandler("/Home/Error");
-
-    // HTTP Strict Transport Security (HSTS) protokolünü etkinleştirir. 
-    // Tarayıcılara sitenin sadece HTTPS üzerinden açılması gerektiğini bildirerek güvenliği artırır.
     app.UseHsts();
 }
 
-// Güvensiz HTTP isteklerini otomatik olarak güvenli HTTPS protokolüne yönlendirir.
 app.UseHttpsRedirection();
-
-// Gelen isteklerin URL'lerine göre hangi rota (route) şablonuyla eşleşeceğini belirleyen yönlendirme (Routing) sistemini etkinleştirir.
 app.UseRouting();
 
 app.UseAuthentication();
-
-// Kullanıcının talep edilen kaynağa erişim yetkisini (Authorization) kontrol eder.
 app.UseAuthorization();
 
-// .NET 9 ile gelen, CSS, JS ve resim gibi statik dosyaların optimize edilerek (sıkıştırma, fingerprinting vb.) sunulmasını sağlayan middleware'i eşler.
 app.MapStaticAssets();
 
 app.MapControllerRoute(
@@ -74,18 +82,24 @@ app.MapControllerRoute(
     pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}"
 );
 
-// MVC mimarisine uygun varsayılan rota şablonunu tanımlar.
-// Herhangi bir Controller veya Action belirtilmediğinde varsayılan olarak HomeController sınıfındaki Index metodunu çalıştırır.
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
+// Auto-initialize PostgreSQL tables and seed default admin user
 using (var scope = app.Services.CreateScope())
 {
-    var userSeedService = scope.ServiceProvider.GetRequiredService<IUserSeedService>();
-    await userSeedService.SeedDefaultUserAsync();
+    try
+    {
+        var dbInitializer = scope.ServiceProvider.GetRequiredService<IDatabaseInitializerService>();
+        await dbInitializer.InitializeDatabaseAsync();
+    }
+    catch (Exception ex)
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Failed to initialize database on startup.");
+    }
 }
 
-// Uygulamayı başlatır ve gelen HTTP isteklerini dinlemeye (port üzerinden) başlar.
 app.Run();

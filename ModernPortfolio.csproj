@@ -15,6 +15,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="ModernPortfolio\**" />
+    <Content Remove="ModernPortfolio\**" />
+    <EmbeddedResource Remove="ModernPortfolio\**" />
+    <None Remove="ModernPortfolio\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Areas\" />
     <Folder Include="Areas\Admin\" />
     <Folder Include="Areas\Admin\Controllers\" />

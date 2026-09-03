@@ -1,0 +1,345 @@
+@model List<SkillListViewModel>
+@{
+    ViewData["Title"] = "Tech Stack Management";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+
+    var totalCount = Model?.Count ?? 0;
+    var avgPercentage = totalCount > 0 ? (int)Math.Round(Model!.Average(s => s.Percentage)) : 0;
+    var topSkill = Model?.OrderByDescending(s => s.Percentage).FirstOrDefault()?.Name ?? "None";
+}
+
+<style>
+    .skill-header-icon {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, #009CFF 0%, #0066cc 100%);
+        box-shadow: 0 4px 12px rgba(0, 156, 255, 0.25);
+    }
+    .stat-card {
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    }
+    .stat-icon-wrapper {
+        width: 45px;
+        height: 45px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .skill-progress {
+        height: 8px;
+        border-radius: 6px;
+        background-color: #e9ecef;
+        overflow: hidden;
+    }
+    .skill-progress-bar {
+        background: linear-gradient(90deg, #009CFF 0%, #00d2ff 100%);
+        border-radius: 6px;
+    }
+    .action-btn {
+        transition: all 0.2s ease;
+    }
+    .action-btn:hover {
+        transform: translateY(-1px);
+    }
+</style>
+
+<div class="container-fluid pt-4 px-4">
+    <!-- Header -->
+    <div class="row g-4 mb-4">
+        <div class="col-12">
+            <div class="bg-light rounded p-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 shadow-sm">
+                <div class="d-flex align-items-center">
+                    <div class="skill-header-icon text-white rounded-circle me-3 d-flex align-items-center justify-content-center flex-shrink-0">
+                        <i class="fa fa-code fa-lg"></i>
+                    </div>
+                    <div>
+                        <h4 class="mb-1 text-primary fw-bold">Technology Stack &amp; Core Competencies</h4>
+                        <p class="text-muted mb-0 small">Configure Aveny Technologies' engineering proficiencies, frameworks, cloud platforms, and display order.</p>
+                    </div>
+                </div>
+                <div>
+                    <a asp-area="Admin" asp-controller="Skills" asp-action="Create" class="btn btn-primary rounded-pill px-4 py-2 shadow-sm action-btn">
+                        <i class="fa fa-plus me-2"></i>Add New Technology
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Notifications -->
+    @if (TempData["SuccessMessage"] is not null)
+    {
+        <div class="alert alert-success alert-dismissible fade show rounded-3 shadow-sm border-0 d-flex align-items-center mb-4" role="alert">
+            <i class="fa fa-check-circle fa-lg me-2 text-success"></i>
+            <div>@TempData["SuccessMessage"]</div>
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] is not null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show rounded-3 shadow-sm border-0 d-flex align-items-center mb-4" role="alert">
+            <i class="fa fa-exclamation-triangle fa-lg me-2 text-danger"></i>
+            <div>@TempData["ErrorMessage"]</div>
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Stat Metric Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-sm-4">
+            <div class="bg-light rounded p-4 h-100 stat-card">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="text-muted mb-1 small fw-bold text-uppercase">Total Competencies</p>
+                        <h3 class="mb-0 text-dark fw-bold">@totalCount</h3>
+                    </div>
+                    <div class="stat-icon-wrapper bg-primary bg-opacity-10 text-primary">
+                        <i class="fa fa-laptop-code fa-lg"></i>
+                    </div>
+                </div>
+                <div class="mt-3 text-muted small">
+                    <span class="text-primary fw-bold">Active</span> tech capabilities listed
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="bg-light rounded p-4 h-100 stat-card">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="text-muted mb-1 small fw-bold text-uppercase">Avg. Mastery Level</p>
+                        <h3 class="mb-0 text-success fw-bold">%@avgPercentage</h3>
+                    </div>
+                    <div class="stat-icon-wrapper bg-success bg-opacity-10 text-success">
+                        <i class="fa fa-chart-line fa-lg"></i>
+                    </div>
+                </div>
+                <div class="mt-3 text-muted small">
+                    <span class="text-success fw-bold">Overall</span> team proficiency score
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="bg-light rounded p-4 h-100 stat-card">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="text-muted mb-1 small fw-bold text-uppercase">Flagship Strength</p>
+                        <h4 class="mb-0 text-info fw-bold text-truncate" style="max-width: 140px;">@topSkill</h4>
+                    </div>
+                    <div class="stat-icon-wrapper bg-info bg-opacity-10 text-info">
+                        <i class="fa fa-trophy fa-lg"></i>
+                    </div>
+                </div>
+                <div class="mt-3 text-muted small">
+                    <span class="text-info fw-bold">Primary</span> architectural mastery
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Toolbar -->
+    <div class="bg-light rounded p-3 mb-4 shadow-sm">
+        <div class="row g-3 align-items-center justify-content-between">
+            <div class="col-12 col-md-5">
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0 text-muted rounded-start-pill ps-3">
+                        <i class="fa fa-search"></i>
+                    </span>
+                    <input type="text" id="skillSearchInput" class="form-control border-start-0 rounded-end-pill ps-1" placeholder="Search technologies by name..." />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skills Table -->
+    <div class="bg-light rounded p-4 shadow-sm mb-4">
+        @if (Model is not null && Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0" id="skillsTable">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-center" style="width: 70px;">#ID</th>
+                            <th scope="col" style="min-width: 180px;">TECHNOLOGY / FRAMEWORK</th>
+                            <th scope="col" style="min-width: 250px;">PROFICIENCY / MASTERY</th>
+                            <th scope="col" class="text-center" style="width: 120px;">ORDER</th>
+                            <th scope="col" style="min-width: 140px;">ADDED</th>
+                            <th scope="col" class="text-end" style="min-width: 170px;">ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="skillsTableBody">
+                        @foreach (var skill in Model)
+                        {
+                            <tr class="skill-item-row" data-name="@skill.Name.ToLower()">
+                                <td class="text-center">
+                                    <span class="badge bg-white text-muted border px-2 py-1 rounded fw-bold">#@skill.Id</span>
+                                </td>
+                                <td>
+                                    <span class="fw-bold text-dark">@skill.Name</span>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="flex-grow-1">
+                                            <div class="skill-progress">
+                                                <div class="skill-progress-bar h-100" style="width: @skill.Percentage%;"></div>
+                                            </div>
+                                        </div>
+                                        <span class="badge bg-primary bg-opacity-10 text-primary fw-bold px-2 py-1 rounded-pill">
+                                            %@skill.Percentage
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge bg-white text-dark border px-2 py-1 rounded">@skill.DisplayOrder</span>
+                                </td>
+                                <td>
+                                    <span class="text-muted small">
+                                        <i class="fa fa-calendar-alt me-1"></i>@skill.CreatedDate
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <div class="d-inline-flex align-items-center gap-1">
+                                        <a asp-area="Admin" asp-controller="Skills" asp-action="Edit" asp-route-id="@skill.Id" 
+                                           class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 action-btn">
+                                            <i class="fa fa-edit me-1"></i> Edit
+                                        </a>
+                                        <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1 action-btn btn-delete-skill"
+                                                data-id="@skill.Id" data-name="@skill.Name">
+                                            <i class="fa fa-trash-alt me-1"></i> Delete
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- No Search Results -->
+            <div id="noSkillResultsState" class="p-5 text-center d-none">
+                <div class="mb-3 text-muted">
+                    <i class="fa fa-search fa-3x opacity-50"></i>
+                </div>
+                <h5 class="fw-bold text-dark">No Matching Technologies Found</h5>
+                <p class="text-muted small mb-0">Try searching for another technology or framework.</p>
+            </div>
+        }
+        else
+        {
+            <!-- Empty State -->
+            <div class="p-5 text-center">
+                <div class="mb-4">
+                    <div class="btn-square bg-primary bg-opacity-10 text-primary rounded-circle mx-auto d-flex align-items-center justify-content-center" style="width: 75px; height: 75px;">
+                        <i class="fa fa-code fa-2x"></i>
+                    </div>
+                </div>
+                <h5 class="fw-bold text-dark mb-2">No Technologies Configured Yet</h5>
+                <p class="text-muted mb-4 mx-auto" style="max-width: 450px;">
+                    Showcase Aveny Technologies' engineering capabilities, cloud platforms, programming languages, and proficiency levels.
+                </p>
+                <a asp-area="Admin" asp-controller="Skills" asp-action="Create" class="btn btn-primary rounded-pill px-4 py-2 shadow-sm action-btn">
+                    <i class="fa fa-plus me-2"></i>Add First Technology
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Modern Delete Confirmation Modal -->
+<div class="modal fade" id="deleteSkillModal" tabindex="-1" aria-labelledby="deleteSkillModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0 pb-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center px-4 pb-4">
+                <div class="btn-square bg-danger bg-opacity-10 text-danger rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 65px; height: 65px;">
+                    <i class="fa fa-trash-alt fa-2x"></i>
+                </div>
+                <h5 class="modal-title fw-bold text-dark mb-2" id="deleteSkillModalLabel">Delete Technology?</h5>
+                <p class="text-muted small mb-1">Are you sure you want to delete this technology competency from Aveny's profile?</p>
+                <div class="p-3 bg-light rounded-3 my-3">
+                    <span class="fw-bold text-danger" id="deleteSkillNameText"></span>
+                </div>
+            </div>
+            <div class="modal-footer border-0 pt-0 d-flex justify-content-center gap-2 pb-4">
+                <button type="button" class="btn btn-light rounded-pill px-4 py-2" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteSkillForm" asp-area="Admin" asp-controller="Skills" asp-action="Delete" method="post" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" id="deleteSkillIdInput" value="" />
+                    <button type="submit" class="btn btn-danger rounded-pill px-4 py-2 shadow-sm">
+                        <i class="fa fa-trash-alt me-1"></i> Yes, Delete
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('skillSearchInput');
+            const tableRows = document.querySelectorAll('.skill-item-row');
+            const noResultsState = document.getElementById('noSkillResultsState');
+            const table = document.getElementById('skillsTable');
+
+            if (searchInput) {
+                searchInput.addEventListener('input', function (e) {
+                    const query = e.target.value.toLowerCase().trim();
+                    let visibleCount = 0;
+
+                    tableRows.forEach(row => {
+                        const name = row.getAttribute('data-name') || '';
+                        if (!query || name.includes(query)) {
+                            row.style.display = '';
+                            visibleCount++;
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+
+                    if (noResultsState && table) {
+                        if (visibleCount === 0 && tableRows.length > 0) {
+                            noResultsState.classList.remove('d-none');
+                            table.classList.add('d-none');
+                        } else {
+                            noResultsState.classList.add('d-none');
+                            table.classList.remove('d-none');
+                        }
+                    }
+                });
+            }
+
+            // Modal handling
+            const deleteModalEl = document.getElementById('deleteSkillModal');
+            let deleteModal = null;
+            if (deleteModalEl && typeof bootstrap !== 'undefined') {
+                deleteModal = new bootstrap.Modal(deleteModalEl);
+            }
+
+            document.querySelectorAll('.btn-delete-skill').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const id = this.getAttribute('data-id');
+                    const name = this.getAttribute('data-name');
+
+                    document.getElementById('deleteSkillIdInput').value = id;
+                    document.getElementById('deleteSkillNameText').textContent = name;
+
+                    if (deleteModal) {
+                        deleteModal.show();
+                    } else {
+                        if (confirm(`Are you sure you want to delete "${name}"?`)) {
+                            document.getElementById('deleteSkillForm').submit();
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

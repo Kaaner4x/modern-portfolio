@@ -1,0 +1,541 @@
+@model List<ContactListViewModel>
+@{
+    ViewData["Title"] = "Client Inquiries & Messages";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+
+    var totalCount = Model?.Count ?? 0;
+    var unreadCount = Model?.Count(c => !c.IsRead) ?? 0;
+    var readCount = Model?.Count(c => c.IsRead) ?? 0;
+}
+
+<style>
+    .inbox-header-icon {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, #009CFF 0%, #0066cc 100%);
+        box-shadow: 0 4px 12px rgba(0, 156, 255, 0.25);
+    }
+    .stat-card {
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    }
+    .stat-icon-wrapper {
+        width: 45px;
+        height: 45px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .sender-avatar-initials {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #009CFF 0%, #0066cc 100%);
+        color: #ffffff;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.95rem;
+    }
+    .unread-row {
+        background-color: rgba(0, 156, 255, 0.035);
+        font-weight: 600;
+    }
+    .pulse-unread {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #009CFF;
+        box-shadow: 0 0 0 3px rgba(0, 156, 255, 0.25);
+        display: inline-block;
+        margin-right: 6px;
+    }
+    .badge-unread {
+        background-color: rgba(0, 156, 255, 0.12);
+        color: #009CFF;
+        border: 1px solid rgba(0, 156, 255, 0.25);
+    }
+    .badge-read {
+        background-color: rgba(108, 117, 125, 0.12);
+        color: #6c757d;
+        border: 1px solid rgba(108, 117, 125, 0.25);
+    }
+    .filter-btn.active {
+        background-color: #009CFF !important;
+        color: #ffffff !important;
+        border-color: #009CFF !important;
+    }
+    .action-btn {
+        transition: all 0.2s ease;
+    }
+    .action-btn:hover {
+        transform: translateY(-1px);
+    }
+</style>
+
+<div class="container-fluid pt-4 px-4">
+    <!-- Header -->
+    <div class="row g-4 mb-4">
+        <div class="col-12">
+            <div class="bg-light rounded p-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 shadow-sm">
+                <div class="d-flex align-items-center">
+                    <div class="inbox-header-icon text-white rounded-circle me-3 d-flex align-items-center justify-content-center flex-shrink-0">
+                        <i class="fa fa-envelope-open-text fa-lg"></i>
+                    </div>
+                    <div>
+                        <h4 class="mb-1 text-primary fw-bold">Client Inquiries &amp; Messages</h4>
+                        <p class="text-muted mb-0 small">Review incoming project inquiries, enterprise proposals, and contact requests submitted to Aveny Technologies.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Notifications -->
+    @if (TempData["SuccessMessage"] is not null)
+    {
+        <div class="alert alert-success alert-dismissible fade show rounded-3 shadow-sm border-0 d-flex align-items-center mb-4" role="alert">
+            <i class="fa fa-check-circle fa-lg me-2 text-success"></i>
+            <div>@TempData["SuccessMessage"]</div>
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] is not null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show rounded-3 shadow-sm border-0 d-flex align-items-center mb-4" role="alert">
+            <i class="fa fa-exclamation-triangle fa-lg me-2 text-danger"></i>
+            <div>@TempData["ErrorMessage"]</div>
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Stat Metric Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-sm-4">
+            <div class="bg-light rounded p-4 h-100 stat-card">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="text-muted mb-1 small fw-bold text-uppercase">Total Inquiries</p>
+                        <h3 class="mb-0 text-dark fw-bold">@totalCount</h3>
+                    </div>
+                    <div class="stat-icon-wrapper bg-primary bg-opacity-10 text-primary">
+                        <i class="fa fa-inbox fa-lg"></i>
+                    </div>
+                </div>
+                <div class="mt-3 text-muted small">
+                    <span class="text-primary fw-bold">All</span> incoming client messages
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="bg-light rounded p-4 h-100 stat-card">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="text-muted mb-1 small fw-bold text-uppercase">Unread Inquiries</p>
+                        <h3 class="mb-0 text-danger fw-bold">@unreadCount</h3>
+                    </div>
+                    <div class="stat-icon-wrapper bg-danger bg-opacity-10 text-danger">
+                        <i class="fa fa-envelope fa-lg"></i>
+                    </div>
+                </div>
+                <div class="mt-3 text-muted small">
+                    <span class="text-danger fw-bold">Awaiting</span> review &amp; response
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="bg-light rounded p-4 h-100 stat-card">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="text-muted mb-1 small fw-bold text-uppercase">Reviewed / Read</p>
+                        <h3 class="mb-0 text-success fw-bold">@readCount</h3>
+                    </div>
+                    <div class="stat-icon-wrapper bg-success bg-opacity-10 text-success">
+                        <i class="fa fa-check-double fa-lg"></i>
+                    </div>
+                </div>
+                <div class="mt-3 text-muted small">
+                    <span class="text-success fw-bold">Processed</span> inquiries
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter & Search Toolbar -->
+    <div class="bg-light rounded p-3 mb-4 shadow-sm">
+        <div class="row g-3 align-items-center justify-content-between">
+            <div class="col-12 col-md-5">
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0 text-muted rounded-start-pill ps-3">
+                        <i class="fa fa-search"></i>
+                    </span>
+                    <input type="text" id="inboxSearchInput" class="form-control border-start-0 rounded-end-pill ps-1" placeholder="Search by sender, email, subject, or content..." />
+                </div>
+            </div>
+
+            <div class="col-12 col-md-7 d-flex justify-content-md-end gap-2">
+                <div class="btn-group rounded-pill overflow-hidden border" role="group">
+                    <button type="button" class="btn btn-sm btn-light filter-btn active px-3 py-2 fw-medium" data-filter="all">
+                        All <span class="badge bg-white text-dark ms-1 rounded-pill">@totalCount</span>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-light filter-btn px-3 py-2 fw-medium" data-filter="unread">
+                        Unread <span class="badge bg-danger text-white ms-1 rounded-pill">@unreadCount</span>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-light filter-btn px-3 py-2 fw-medium" data-filter="read">
+                        Read <span class="badge bg-secondary text-white ms-1 rounded-pill">@readCount</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Messages Table -->
+    <div class="bg-light rounded p-4 shadow-sm mb-4">
+        @if (Model is not null && Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0" id="inboxTable">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-center" style="width: 70px;">#ID</th>
+                            <th scope="col" style="min-width: 220px;">SENDER / CONTACT</th>
+                            <th scope="col" style="min-width: 260px;">SUBJECT &amp; PREVIEW</th>
+                            <th scope="col" style="min-width: 120px;">STATUS</th>
+                            <th scope="col" style="min-width: 150px;">DATE</th>
+                            <th scope="col" class="text-end" style="min-width: 160px;">ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inboxTableBody">
+                        @foreach (var item in Model)
+                        {
+                            var initial = string.IsNullOrEmpty(item.Name) ? "A" : item.Name.Trim().Substring(0, 1).ToUpperInvariant();
+                            <tr class="inbox-item-row @(item.IsRead ? "" : "unread-row")" 
+                                data-name="@item.Name.ToLower()" 
+                                data-email="@item.Email.ToLower()" 
+                                data-subject="@((item.Subject ?? "").ToLower())" 
+                                data-message="@item.Message.ToLower()" 
+                                data-status="@(item.IsRead ? "read" : "unread")">
+                                
+                                <td class="text-center">
+                                    <span class="badge bg-white text-muted border px-2 py-1 rounded fw-bold">#@item.Id</span>
+                                </td>
+
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="sender-avatar-initials me-3 flex-shrink-0 shadow-sm">
+                                            @initial
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0 text-dark @(item.IsRead ? "" : "fw-bold")">@item.Name</h6>
+                                            <small class="text-muted"><a href="mailto:@item.Email" class="text-decoration-none text-muted">@item.Email</a></small>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div style="max-width: 380px;">
+                                        <span class="text-dark d-block text-truncate @(item.IsRead ? "fw-medium" : "fw-bold")">
+                                            @(string.IsNullOrEmpty(item.Subject) ? "No Subject" : item.Subject)
+                                        </span>
+                                        <small class="text-muted d-block text-truncate">
+                                            @item.Message
+                                        </small>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    @if (!item.IsRead)
+                                    {
+                                        <span class="badge badge-unread rounded-pill px-3 py-2 fw-medium d-inline-flex align-items-center">
+                                            <span class="pulse-unread"></span> New
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-read rounded-pill px-3 py-2 fw-medium d-inline-flex align-items-center">
+                                            <i class="fa fa-check me-1"></i> Read
+                                        </span>
+                                    }
+                                </td>
+
+                                <td>
+                                    <span class="text-secondary small">
+                                        <i class="fa fa-clock me-1 text-muted"></i>@item.CreatedDateFormatted
+                                    </span>
+                                </td>
+
+                                <td class="text-end">
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 me-1 action-btn btn-view-message"
+                                                data-id="@item.Id" 
+                                                data-name="@item.Name" 
+                                                data-email="@item.Email" 
+                                                data-subject="@(item.Subject ?? "No Subject")" 
+                                                data-message="@item.Message" 
+                                                data-date="@item.CreatedDateFormatted" 
+                                                data-isread="@(item.IsRead ? "true" : "false")"
+                                                title="Read Message">
+                                            <i class="fa fa-eye me-1"></i> View
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1 action-btn btn-delete-message"
+                                                data-id="@item.Id" data-name="@item.Name" title="Delete Message">
+                                            <i class="fa fa-trash-alt me-1"></i> Delete
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- No Filter Results -->
+            <div id="noInboxResultsState" class="p-5 text-center d-none">
+                <div class="mb-3 text-muted">
+                    <i class="fa fa-search fa-3x opacity-50"></i>
+                </div>
+                <h5 class="fw-bold text-dark">No Matching Messages Found</h5>
+                <p class="text-muted small mb-0">Try changing your search keywords or filter selection.</p>
+            </div>
+        }
+        else
+        {
+            <!-- Empty State -->
+            <div class="p-5 text-center">
+                <div class="mb-4">
+                    <div class="btn-square bg-primary bg-opacity-10 text-primary rounded-circle mx-auto d-flex align-items-center justify-content-center" style="width: 75px; height: 75px;">
+                        <i class="fa fa-inbox fa-2x"></i>
+                    </div>
+                </div>
+                <h5 class="fw-bold text-dark mb-2">No Client Inquiries Yet</h5>
+                <p class="text-muted mb-0 mx-auto" style="max-width: 450px;">
+                    When visitors or prospective enterprise partners submit inquiries through Aveny Technologies' contact form, they will appear here in real time.
+                </p>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Message Detail Modal -->
+<div class="modal fade" id="viewMessageModal" tabindex="-1" aria-labelledby="viewMessageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light border-0 py-3">
+                <div class="d-flex align-items-center">
+                    <div class="btn-square bg-primary bg-opacity-10 text-primary rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                        <i class="fa fa-envelope-open fa-lg"></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title fw-bold text-dark mb-0" id="viewMessageSubject">Subject</h5>
+                        <small class="text-muted" id="viewMessageDate">Date</small>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="p-3 bg-light rounded-3 mb-4 border d-flex flex-wrap align-items-center justify-content-between gap-3">
+                    <div>
+                        <div class="d-flex align-items-center mb-1">
+                            <strong class="text-dark me-2">From:</strong>
+                            <span id="viewMessageSender" class="fw-bold text-primary">Sender Name</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <strong class="text-dark me-2">Email:</strong>
+                            <a href="#" id="viewMessageEmail" class="text-decoration-none text-muted">sender@email.com</a>
+                        </div>
+                    </div>
+                    <div>
+                        <a href="#" id="btnReplyMailto" class="btn btn-sm btn-primary rounded-pill px-3 py-2 shadow-sm">
+                            <i class="fa fa-reply me-1"></i> Reply via Email
+                        </a>
+                    </div>
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label fw-bold text-dark mb-2">Inquiry Message Content:</label>
+                    <div class="p-4 bg-white rounded-3 border" style="min-height: 140px; white-space: pre-wrap; line-height: 1.7;" id="viewMessageBody">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0 pt-0 d-flex justify-content-between">
+                <button type="button" class="btn btn-light rounded-pill px-4 py-2" data-bs-dismiss="modal">Close</button>
+                <form id="markAsReadForm" asp-area="Admin" asp-controller="Contacts" asp-action="MarkAsRead" method="post" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" id="markAsReadIdInput" value="" />
+                    <button type="submit" id="btnMarkReadAction" class="btn btn-outline-success rounded-pill px-4 py-2">
+                        <i class="fa fa-check me-1"></i> Mark as Read
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modern Delete Confirmation Modal -->
+<div class="modal fade" id="deleteMessageModal" tabindex="-1" aria-labelledby="deleteMessageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0 pb-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center px-4 pb-4">
+                <div class="btn-square bg-danger bg-opacity-10 text-danger rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 65px; height: 65px;">
+                    <i class="fa fa-trash-alt fa-2x"></i>
+                </div>
+                <h5 class="modal-title fw-bold text-dark mb-2" id="deleteMessageModalLabel">Delete Inquiry?</h5>
+                <p class="text-muted small mb-1">Are you sure you want to permanently delete the inquiry from:</p>
+                <div class="p-3 bg-light rounded-3 my-3">
+                    <span class="fw-bold text-danger" id="deleteSenderNameText"></span>
+                </div>
+            </div>
+            <div class="modal-footer border-0 pt-0 d-flex justify-content-center gap-2 pb-4">
+                <button type="button" class="btn btn-light rounded-pill px-4 py-2" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteMessageForm" asp-area="Admin" asp-controller="Contacts" asp-action="Delete" method="post" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" id="deleteMessageIdInput" value="" />
+                    <button type="submit" class="btn btn-danger rounded-pill px-4 py-2 shadow-sm">
+                        <i class="fa fa-trash-alt me-1"></i> Yes, Delete
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('inboxSearchInput');
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const tableRows = document.querySelectorAll('.inbox-item-row');
+            const noResultsState = document.getElementById('noInboxResultsState');
+            const table = document.getElementById('inboxTable');
+
+            let currentFilter = 'all';
+            let searchQuery = '';
+
+            function applyFilters() {
+                let visibleCount = 0;
+
+                tableRows.forEach(row => {
+                    const name = row.getAttribute('data-name') || '';
+                    const email = row.getAttribute('data-email') || '';
+                    const subject = row.getAttribute('data-subject') || '';
+                    const message = row.getAttribute('data-message') || '';
+                    const status = row.getAttribute('data-status') || '';
+
+                    const matchesSearch = !searchQuery || name.includes(searchQuery) || email.includes(searchQuery) || subject.includes(searchQuery) || message.includes(searchQuery);
+                    const matchesStatus = currentFilter === 'all' || status === currentFilter;
+
+                    if (matchesSearch && matchesStatus) {
+                        row.style.display = '';
+                        visibleCount++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+
+                if (noResultsState && table) {
+                    if (visibleCount === 0 && tableRows.length > 0) {
+                        noResultsState.classList.remove('d-none');
+                        table.classList.add('d-none');
+                    } else {
+                        noResultsState.classList.add('d-none');
+                        table.classList.remove('d-none');
+                    }
+                }
+            }
+
+            if (searchInput) {
+                searchInput.addEventListener('input', function (e) {
+                    searchQuery = e.target.value.toLowerCase().trim();
+                    applyFilters();
+                });
+            }
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.getAttribute('data-filter');
+                    applyFilters();
+                });
+            });
+
+            // View Message Modal
+            const viewModalEl = document.getElementById('viewMessageModal');
+            let viewModal = null;
+            if (viewModalEl && typeof bootstrap !== 'undefined') {
+                viewModal = new bootstrap.Modal(viewModalEl);
+            }
+
+            document.querySelectorAll('.btn-view-message').forEach(button => {
+                button.addEventListener('click', function () {
+                    const id = this.getAttribute('data-id');
+                    const name = this.getAttribute('data-name');
+                    const email = this.getAttribute('data-email');
+                    const subject = this.getAttribute('data-subject');
+                    const message = this.getAttribute('data-message');
+                    const date = this.getAttribute('data-date');
+                    const isRead = this.getAttribute('data-isread') === 'true';
+
+                    document.getElementById('viewMessageSubject').textContent = subject;
+                    document.getElementById('viewMessageDate').textContent = date;
+                    document.getElementById('viewMessageSender').textContent = name;
+                    
+                    const emailLink = document.getElementById('viewMessageEmail');
+                    emailLink.textContent = email;
+                    emailLink.href = 'mailto:' + email;
+
+                    const replyBtn = document.getElementById('btnReplyMailto');
+                    replyBtn.href = `mailto:${email}?subject=Re: ${encodeURIComponent(subject)}`;
+
+                    document.getElementById('viewMessageBody').textContent = message;
+
+                    document.getElementById('markAsReadIdInput').value = id;
+                    const markReadBtn = document.getElementById('btnMarkReadAction');
+                    if (isRead) {
+                        markReadBtn.style.display = 'none';
+                    } else {
+                        markReadBtn.style.display = 'inline-block';
+                    }
+
+                    if (viewModal) {
+                        viewModal.show();
+                    }
+                });
+            });
+
+            // Delete Modal
+            const deleteModalEl = document.getElementById('deleteMessageModal');
+            let deleteModal = null;
+            if (deleteModalEl && typeof bootstrap !== 'undefined') {
+                deleteModal = new bootstrap.Modal(deleteModalEl);
+            }
+
+            document.querySelectorAll('.btn-delete-message').forEach(button => {
+                button.addEventListener('click', function () {
+                    const id = this.getAttribute('data-id');
+                    const name = this.getAttribute('data-name');
+
+                    document.getElementById('deleteMessageIdInput').value = id;
+                    document.getElementById('deleteSenderNameText').textContent = name;
+
+                    if (deleteModal) {
+                        deleteModal.show();
+                    } else {
+                        if (confirm(`Are you sure you want to delete inquiry from "${name}"?`)) {
+                            document.getElementById('deleteMessageForm').submit();
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

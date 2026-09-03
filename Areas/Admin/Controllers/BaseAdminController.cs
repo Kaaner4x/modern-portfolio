@@ -5,6 +5,7 @@ namespace ModernPortfolio.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize]
+    [AutoValidateAntiforgeryToken]
     public abstract class BaseAdminController : Controller
     {
     }

@@ -3,13 +3,13 @@
 
 <head>
     <meta charset="utf-8">
-    <title>DASHMIN - Bootstrap Admin Template</title>
+    <title>Aveny Technologies - Admin Control Console</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
 
     <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon">
+    <link href="~/admin/img/favicon.ico" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -46,8 +46,8 @@
         <!-- Sidebar Start -->
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-light navbar-light">
-                <a href="index.html" class="navbar-brand mx-4 mb-3">
-                    <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>DASHMIN</h3>
+                <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="navbar-brand mx-4 mb-3">
+                    <h3 class="text-primary fw-bold"><i class="fa fa-layer-group me-2"></i>AVENY</h3>
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <div class="position-relative">
@@ -58,18 +58,37 @@
                         </div>
                     </div>
                     <div class="ms-3">
-                        <h6 class="mb-0">@(User.Identity?.IsAuthenticated == true ? User.Identity.Name : "Admin")</h6>
-                        <span>Admin</span>
+                        <h6 class="mb-0 fw-bold">@(User.Identity?.IsAuthenticated == true ? User.Identity.Name : "Admin")</h6>
+                        <span class="text-muted small">Aveny Administrator</span>
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
                     <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")">
                         <i class="fa fa-tachometer-alt me-2"></i>Dashboard
                     </a>
-                    <a asp-area="Admin" asp-controller="Settings" asp-action="Index" class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Settings" ? "active" : "")">
-                        <i class="fa fa-cog me-2"></i>Settings
+                    <a asp-area="Admin" asp-controller="Contacts" asp-action="Index" class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Contacts" ? "active" : "")">
+                        <i class="fa fa-inbox me-2"></i>Inquiries
                     </a>
-                    <a asp-area="Admin" asp-controller="Account" asp-action="Logout" class="nav-item nav-link">
+                    <a asp-area="Admin" asp-controller="About" asp-action="Index" class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "About" ? "active" : "")">
+                        <i class="fa fa-building me-2"></i>Company Info
+                    </a>
+                    <a asp-area="Admin" asp-controller="Skills" asp-action="Index" class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Skills" ? "active" : "")">
+                        <i class="fa fa-code me-2"></i>Tech Stack
+                    </a>
+                    <a asp-area="Admin" asp-controller="Projects" asp-action="Index" class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Projects" ? "active" : "")">
+                        <i class="fa fa-laptop-code me-2"></i>Solutions
+                    </a>
+                    <a asp-area="Admin" asp-controller="Testimonials" asp-action="Index" class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Testimonials" ? "active" : "")">
+                        <i class="fa fa-comments me-2"></i>Client Reviews
+                    </a>
+                    <a asp-area="Admin" asp-controller="Settings" asp-action="Index" class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Settings" ? "active" : "")">
+                        <i class="fa fa-cog me-2"></i>Portal Settings
+                    </a>
+                    <hr class="my-2 text-muted opacity-25">
+                    <a href="/" class="nav-item nav-link text-primary">
+                        <i class="fa fa-globe me-2"></i>Public Website
+                    </a>
+                    <a asp-area="Admin" asp-controller="Account" asp-action="Logout" class="nav-item nav-link text-danger">
                         <i class="fas fa-sign-out-alt me-2"></i>Log Out
                     </a>
                 </div>
@@ -83,23 +102,30 @@
             <!-- Navbar Start -->
             <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
                 <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="navbar-brand d-flex d-lg-none me-4">
-                    <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
+                    <h2 class="text-primary mb-0"><i class="fa fa-layer-group"></i></h2>
                 </a>
                 <a href="#" class="sidebar-toggler flex-shrink-0">
                     <i class="fa fa-bars"></i>
                 </a>
-                <form class="d-none d-md-flex ms-4">
-                    <input class="form-control border-0" type="search" placeholder="Search">
-                </form>
+                <div class="d-none d-md-flex ms-4 align-items-center">
+                    <span class="text-muted small fw-medium">
+                        <i class="fa fa-layer-group me-1 text-primary"></i> Aveny Technologies Administration Console
+                    </span>
+                </div>
                 <div class="navbar-nav align-items-center ms-auto">
+                    <!-- Live Website Direct Button -->
+                    <a href="/" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 me-3 shadow-sm d-none d-sm-inline-flex align-items-center" title="Open live public website">
+                        <i class="fa fa-external-link-alt me-1"></i>View Live Site
+                    </a>
+
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                             <img class="rounded-circle me-lg-2" src="~/admin/img/user.jpg" alt="" style="width: 40px; height: 40px;">
                             <span class="d-none d-lg-inline-flex">@(User.Identity?.IsAuthenticated == true ? User.Identity.Name : "Admin")</span>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                            <a asp-area="Admin" asp-controller="Settings" asp-action="Index" class="dropdown-item"><i class="fa fa-user me-2"></i>My Profile</a>
-                            <a asp-area="Admin" asp-controller="Settings" asp-action="Index" class="dropdown-item"><i class="fa fa-cog me-2"></i>Settings</a>
+                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0 shadow">
+                            <a href="/" class="dropdown-item"><i class="fa fa-globe me-2"></i>Go to Public Website</a>
+                            <a asp-area="Admin" asp-controller="Settings" asp-action="Index" class="dropdown-item"><i class="fa fa-cog me-2"></i>Security Settings</a>
                             <hr class="dropdown-divider">
                             <a asp-area="Admin" asp-controller="Account" asp-action="Logout" class="dropdown-item text-danger"><i class="fas fa-sign-out-alt me-2"></i>Log Out</a>
                         </div>
@@ -109,45 +135,46 @@
             <!-- Navbar End -->
 
 
-                        @RenderBody()
+            @RenderBody()
 
 
-                        <!-- Footer Start -->
-                        <div class="container-fluid pt-4 px-4">
-                            <div class="bg-light rounded-top p-4">
-                                <div class="row">
-                                    <div class="col-12 col-sm-6 text-center text-sm-start">
-                                        &copy; <a href="#">Your Site Name</a>, All Right Reserved.
-                                    </div>
-                                    <div class="col-12 col-sm-6 text-center text-sm-end">
-                                        <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-                                        Designed By <a href="https://htmlcodex.com">HTML Codex</a>
-                                    </div>
-                                </div>
-                            </div>
+            <!-- Footer Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-light rounded-top p-4 shadow-sm">
+                    <div class="row">
+                        <div class="col-12 col-sm-6 text-center text-sm-start">
+                            &copy; <strong class="text-primary">Aveny Technologies</strong>, All Rights Reserved.
                         </div>
-                        <!-- Footer End -->
+                        <div class="col-12 col-sm-6 text-center text-sm-end text-muted small">
+                            Enterprise Control Console v2.0
+                        </div>
                     </div>
-                    <!-- Content End -->
-
-
-                    <!-- Back to Top -->
-                    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
                 </div>
+            </div>
+            <!-- Footer End -->
+        </div>
+        <!-- Content End -->
 
-                <!-- JavaScript Libraries -->
-                <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-                <script src="~/admin/lib/chart/chart.min.js"></script>
-                <script src="~/admin/lib/easing/easing.min.js"></script>
-                <script src="~/admin/lib/waypoints/waypoints.min.js"></script>
-                <script src="~/admin/lib/owlcarousel/owl.carousel.min.js"></script>
-                <script src="~/admin/lib/tempusdominus/js/moment.min.js"></script>
-                <script src="~/admin/lib/tempusdominus/js/moment-timezone.min.js"></script>
-                <script src="~/admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
-                <!-- Template Javascript -->
-                <script src="~/admin/js/main.js"></script>
-            </body>
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
 
-        </html>
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/admin/lib/chart/chart.min.js"></script>
+    <script src="~/admin/lib/easing/easing.min.js"></script>
+    <script src="~/admin/lib/waypoints/waypoints.min.js"></script>
+    <script src="~/admin/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="~/admin/lib/tempusdominus/js/moment.min.js"></script>
+    <script src="~/admin/lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="~/admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="~/admin/js/main.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

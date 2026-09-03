@@ -8,7 +8,7 @@ namespace ModernPortfolio.Services.concrete;
 
 public class ContactService : IContactService
 {
-     private readonly IContactRepository _repository;
+    private readonly IContactRepository _repository;
 
     public ContactService(IContactRepository repository)
     {
@@ -74,6 +74,15 @@ public class ContactService : IContactService
         contact.IsRead = true;
         var result = await _repository.UpdateAsync(contact);
         return result;
+    }
+
+    public async Task<bool> DeleteContactAsync(int id)
+    {
+        if (id <= 0)
+        {
+            throw new ArgumentException("Contact ID must be greater than zero!", nameof(id));
+        }
+        return await _repository.DeleteAsync(id);
     }
 
     private void ValidateContact(Contact contact)

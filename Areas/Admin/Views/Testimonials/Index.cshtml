@@ -1,0 +1,514 @@
+@model List<TestimonialListViewModel>
+@{
+    ViewData["Title"] = "Client Reviews & Endorsement Moderation";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+
+    var totalCount = Model?.Count ?? 0;
+    var approvedCount = Model?.Count(t => t.IsActive) ?? 0;
+    var pendingCount = Model?.Count(t => !t.IsActive) ?? 0;
+    var fiveStarCount = Model?.Count(t => t.Rating == 5) ?? 0;
+}
+
+<style>
+    .testimonial-header-icon {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, #009CFF 0%, #0066cc 100%);
+        box-shadow: 0 4px 12px rgba(0, 156, 255, 0.25);
+    }
+    .stat-card {
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    }
+    .stat-icon-wrapper {
+        width: 45px;
+        height: 45px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .client-avatar {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 50%;
+        transition: transform 0.2s ease;
+    }
+    .client-avatar:hover {
+        transform: scale(1.15);
+    }
+    .avatar-placeholder {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: #eef2f6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #8898aa;
+    }
+    .stars-golden {
+        color: #ffc107;
+    }
+    .badge-approved {
+        background-color: rgba(25, 135, 84, 0.12);
+        color: #198754;
+        border: 1px solid rgba(25, 135, 84, 0.25);
+    }
+    .badge-pending {
+        background-color: rgba(255, 193, 7, 0.15);
+        color: #d39e00;
+        border: 1px solid rgba(255, 193, 7, 0.35);
+    }
+    .pulse-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 6px;
+    }
+    .pulse-dot.active {
+        background-color: #198754;
+        box-shadow: 0 0 0 2px rgba(25, 135, 84, 0.25);
+    }
+    .pulse-dot.pending {
+        background-color: #ffc107;
+        box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.25);
+    }
+    .filter-btn.active {
+        background-color: #009CFF !important;
+        color: #ffffff !important;
+        border-color: #009CFF !important;
+    }
+    .action-btn {
+        transition: all 0.2s ease;
+    }
+    .action-btn:hover {
+        transform: translateY(-1px);
+    }
+</style>
+
+<div class="container-fluid pt-4 px-4">
+    <!-- Header -->
+    <div class="row g-4 mb-4">
+        <div class="col-12">
+            <div class="bg-light rounded p-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 shadow-sm">
+                <div class="d-flex align-items-center">
+                    <div class="testimonial-header-icon text-white rounded-circle me-3 d-flex align-items-center justify-content-center flex-shrink-0">
+                        <i class="fa fa-user-check fa-lg"></i>
+                    </div>
+                    <div>
+                        <h4 class="mb-1 text-primary fw-bold">Client Reviews &amp; Moderation Flow</h4>
+                        <p class="text-muted mb-0 small">Approve, moderate, or suspend partner testimonials and verified customer endorsements for Aveny Technologies.</p>
+                    </div>
+                </div>
+                <div>
+                    <a asp-area="Admin" asp-controller="Testimonials" asp-action="Create" class="btn btn-primary rounded-pill px-4 py-2 shadow-sm action-btn">
+                        <i class="fa fa-plus-circle me-2"></i>Add Client Review
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Notifications -->
+    @if (TempData["SuccessMessage"] is not null)
+    {
+        <div class="alert alert-success alert-dismissible fade show rounded-3 shadow-sm border-0 d-flex align-items-center mb-4" role="alert">
+            <i class="fa fa-check-circle fa-lg me-2 text-success"></i>
+            <div>@TempData["SuccessMessage"]</div>
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] is not null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show rounded-3 shadow-sm border-0 d-flex align-items-center mb-4" role="alert">
+            <i class="fa fa-exclamation-triangle fa-lg me-2 text-danger"></i>
+            <div>@TempData["ErrorMessage"]</div>
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Stat Metric Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-light rounded p-4 h-100 stat-card">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="text-muted mb-1 small fw-bold text-uppercase">Total Reviews</p>
+                        <h3 class="mb-0 text-dark fw-bold">@totalCount</h3>
+                    </div>
+                    <div class="stat-icon-wrapper bg-primary bg-opacity-10 text-primary">
+                        <i class="fa fa-comments fa-lg"></i>
+                    </div>
+                </div>
+                <div class="mt-3 text-muted small">
+                    <span class="text-primary fw-bold">All</span> client endorsements
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-light rounded p-4 h-100 stat-card">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="text-muted mb-1 small fw-bold text-uppercase">Approved &amp; Live</p>
+                        <h3 class="mb-0 text-success fw-bold">@approvedCount</h3>
+                    </div>
+                    <div class="stat-icon-wrapper bg-success bg-opacity-10 text-success">
+                        <i class="fa fa-check-circle fa-lg"></i>
+                    </div>
+                </div>
+                <div class="mt-3 text-muted small">
+                    <span class="text-success fw-bold">Published</span> on live website
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-light rounded p-4 h-100 stat-card">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="text-muted mb-1 small fw-bold text-uppercase">Pending / Suspended</p>
+                        <h3 class="mb-0 text-warning fw-bold">@pendingCount</h3>
+                    </div>
+                    <div class="stat-icon-wrapper bg-warning bg-opacity-10 text-warning">
+                        <i class="fa fa-hourglass-half fa-lg"></i>
+                    </div>
+                </div>
+                <div class="mt-3 text-muted small">
+                    <span class="text-warning fw-bold">Awaiting</span> admin moderation
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-light rounded p-4 h-100 stat-card">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="text-muted mb-1 small fw-bold text-uppercase">5-Star Reviews</p>
+                        <h3 class="mb-0 text-info fw-bold">@fiveStarCount</h3>
+                    </div>
+                    <div class="stat-icon-wrapper bg-info bg-opacity-10 text-info">
+                        <i class="fa fa-star fa-lg"></i>
+                    </div>
+                </div>
+                <div class="mt-3 text-muted small">
+                    <span class="text-info fw-bold">Top</span> tier partner ratings
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter & Search Toolbar -->
+    <div class="bg-light rounded p-3 mb-4 shadow-sm">
+        <div class="row g-3 align-items-center justify-content-between">
+            <div class="col-12 col-md-5">
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0 text-muted rounded-start-pill ps-3">
+                        <i class="fa fa-search"></i>
+                    </span>
+                    <input type="text" id="testimonialSearchInput" class="form-control border-start-0 rounded-end-pill ps-1" placeholder="Search by executive name, company, or feedback..." />
+                </div>
+            </div>
+
+            <div class="col-12 col-md-7 d-flex justify-content-md-end gap-2">
+                <div class="btn-group rounded-pill overflow-hidden border" role="group">
+                    <button type="button" class="btn btn-sm btn-light filter-btn active px-3 py-2 fw-medium" data-filter="all">
+                        All <span class="badge bg-white text-dark ms-1 rounded-pill">@totalCount</span>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-light filter-btn px-3 py-2 fw-medium" data-filter="active">
+                        Approved <span class="badge bg-success text-white ms-1 rounded-pill">@approvedCount</span>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-light filter-btn px-3 py-2 fw-medium" data-filter="passive">
+                        Pending <span class="badge bg-warning text-dark ms-1 rounded-pill">@pendingCount</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Testimonials Table -->
+    <div class="bg-light rounded p-4 shadow-sm mb-4">
+        @if (Model is not null && Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0" id="testimonialsTable">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-center" style="width: 70px;">#ID</th>
+                            <th scope="col" style="min-width: 220px;">CLIENT / EXECUTIVE</th>
+                            <th scope="col" style="min-width: 140px;">RATING</th>
+                            <th scope="col" style="min-width: 260px;">ENDORSEMENT COMMENT</th>
+                            <th scope="col" style="min-width: 160px;">MODERATION STATUS</th>
+                            <th scope="col" style="min-width: 120px;">DATE</th>
+                            <th scope="col" class="text-end" style="min-width: 220px;">ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="testimonialsTableBody">
+                        @foreach (var item in Model)
+                        {
+                            <tr class="testimonial-item-row" 
+                                data-name="@item.ClientName.ToLower()" 
+                                data-position="@((item.ClientPosition ?? "").ToLower())" 
+                                data-comment="@item.Comment.ToLower()" 
+                                data-status="@(item.IsActive ? "active" : "passive")">
+                                
+                                <td class="text-center">
+                                    <span class="badge bg-white text-muted border px-2 py-1 rounded fw-bold">#@item.Id</span>
+                                </td>
+
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-3 flex-shrink-0">
+                                            @if (!string.IsNullOrEmpty(item.ClientImageUrl))
+                                            {
+                                                <img src="@item.ClientImageUrl" alt="@item.ClientName" class="client-avatar border shadow-sm" 
+                                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                                                <div class="avatar-placeholder border" style="display:none;">
+                                                    <i class="fa fa-user"></i>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="avatar-placeholder border">
+                                                    <i class="fa fa-user"></i>
+                                                </div>
+                                            }
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0 text-dark fw-bold">@item.ClientName</h6>
+                                            <small class="text-muted">@(string.IsNullOrEmpty(item.ClientPosition) ? "Enterprise Partner" : item.ClientPosition)</small>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="d-inline-flex align-items-center stars-golden">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            if (i <= item.Rating)
+                                            {
+                                                <i class="fa fa-star small me-1"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="far fa-star small text-muted me-1"></i>
+                                            }
+                                        }
+                                        <span class="badge bg-warning bg-opacity-10 text-dark ms-1 fw-bold">@item.Rating.0</span>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <p class="text-muted small mb-0 text-truncate" style="max-width: 280px;" title="@item.Comment">
+                                        "@item.Comment"
+                                    </p>
+                                </td>
+
+                                <td>
+                                    @if (item.IsActive)
+                                    {
+                                        <span class="badge badge-approved rounded-pill px-3 py-2 fw-medium d-inline-flex align-items-center">
+                                            <span class="pulse-dot active"></span> Approved &amp; Live
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-pending rounded-pill px-3 py-2 fw-medium d-inline-flex align-items-center">
+                                            <span class="pulse-dot pending"></span> Pending Approval
+                                        </span>
+                                    }
+                                </td>
+
+                                <td>
+                                    <span class="text-secondary small">
+                                        <i class="fa fa-calendar-alt me-1 text-muted"></i>@item.CreatedDate
+                                    </span>
+                                </td>
+
+                                <td class="text-end">
+                                    <div class="btn-group" role="group">
+                                        <!-- Quick 1-Click Approve / Suspend Form -->
+                                        <form asp-area="Admin" asp-controller="Testimonials" asp-action="ToggleStatus" asp-route-id="@item.Id" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            @if (item.IsActive)
+                                            {
+                                                <button type="submit" class="btn btn-sm btn-outline-warning rounded-pill px-3 py-1 me-1 action-btn" title="Suspend / Hide from live site">
+                                                    <i class="fa fa-pause me-1"></i> Suspend
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="submit" class="btn btn-sm btn-success text-white rounded-pill px-3 py-1 me-1 action-btn shadow-sm" title="Approve & Publish to live site">
+                                                    <i class="fa fa-check me-1"></i> Approve
+                                                </button>
+                                            }
+                                        </form>
+
+                                        <a asp-area="Admin" asp-controller="Testimonials" asp-action="Edit" asp-route-id="@item.Id" 
+                                           class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 me-1 action-btn" title="Edit Review">
+                                            <i class="fa fa-edit me-1"></i> Edit
+                                        </a>
+
+                                        <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1 action-btn btn-delete-testimonial"
+                                                data-id="@item.Id" data-name="@item.ClientName" title="Delete Review">
+                                            <i class="fa fa-trash-alt me-1"></i> Delete
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- No Filter Results -->
+            <div id="noTestimonialResultsState" class="p-5 text-center d-none">
+                <div class="mb-3 text-muted">
+                    <i class="fa fa-search fa-3x opacity-50"></i>
+                </div>
+                <h5 class="fw-bold text-dark">No Matching Reviews Found</h5>
+                <p class="text-muted small mb-0">Try changing your search query or filter selection.</p>
+            </div>
+        }
+        else
+        {
+            <!-- Empty State -->
+            <div class="p-5 text-center">
+                <div class="mb-4">
+                    <div class="btn-square bg-primary bg-opacity-10 text-primary rounded-circle mx-auto d-flex align-items-center justify-content-center" style="width: 75px; height: 75px;">
+                        <i class="fa fa-comments fa-2x"></i>
+                    </div>
+                </div>
+                <h5 class="fw-bold text-dark mb-2">No Client Reviews Added Yet</h5>
+                <p class="text-muted mb-4 mx-auto" style="max-width: 450px;">
+                    Build credibility by publishing verified endorsements, executive recommendations, and enterprise reviews.
+                </p>
+                <a asp-area="Admin" asp-controller="Testimonials" asp-action="Create" class="btn btn-primary rounded-pill px-4 py-2 shadow-sm action-btn">
+                    <i class="fa fa-plus-circle me-2"></i>Add First Review
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Modern Delete Confirmation Modal -->
+<div class="modal fade" id="deleteTestimonialModal" tabindex="-1" aria-labelledby="deleteTestimonialModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0 pb-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center px-4 pb-4">
+                <div class="btn-square bg-danger bg-opacity-10 text-danger rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 65px; height: 65px;">
+                    <i class="fa fa-trash-alt fa-2x"></i>
+                </div>
+                <h5 class="modal-title fw-bold text-dark mb-2" id="deleteTestimonialModalLabel">Delete Review?</h5>
+                <p class="text-muted small mb-1">Are you sure you want to permanently delete this client endorsement from:</p>
+                <div class="p-3 bg-light rounded-3 my-3">
+                    <span class="fw-bold text-danger" id="deleteTestimonialNameText"></span>
+                </div>
+            </div>
+            <div class="modal-footer border-0 pt-0 d-flex justify-content-center gap-2 pb-4">
+                <button type="button" class="btn btn-light rounded-pill px-4 py-2" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteTestimonialForm" asp-area="Admin" asp-controller="Testimonials" asp-action="Delete" method="post" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" id="deleteTestimonialIdInput" value="" />
+                    <button type="submit" class="btn btn-danger rounded-pill px-4 py-2 shadow-sm">
+                        <i class="fa fa-trash-alt me-1"></i> Yes, Delete
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('testimonialSearchInput');
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const tableRows = document.querySelectorAll('.testimonial-item-row');
+            const noResultsState = document.getElementById('noTestimonialResultsState');
+            const table = document.getElementById('testimonialsTable');
+
+            let currentFilter = 'all';
+            let searchQuery = '';
+
+            function applyFilters() {
+                let visibleCount = 0;
+
+                tableRows.forEach(row => {
+                    const name = row.getAttribute('data-name') || '';
+                    const pos = row.getAttribute('data-position') || '';
+                    const comment = row.getAttribute('data-comment') || '';
+                    const status = row.getAttribute('data-status') || '';
+
+                    const matchesSearch = !searchQuery || name.includes(searchQuery) || pos.includes(searchQuery) || comment.includes(searchQuery);
+                    const matchesStatus = currentFilter === 'all' || status === currentFilter;
+
+                    if (matchesSearch && matchesStatus) {
+                        row.style.display = '';
+                        visibleCount++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+
+                if (noResultsState && table) {
+                    if (visibleCount === 0 && tableRows.length > 0) {
+                        noResultsState.classList.remove('d-none');
+                        table.classList.add('d-none');
+                    } else {
+                        noResultsState.classList.add('d-none');
+                        table.classList.remove('d-none');
+                    }
+                }
+            }
+
+            if (searchInput) {
+                searchInput.addEventListener('input', function (e) {
+                    searchQuery = e.target.value.toLowerCase().trim();
+                    applyFilters();
+                });
+            }
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.getAttribute('data-filter');
+                    applyFilters();
+                });
+            });
+
+            // Modal handling
+            const deleteModalEl = document.getElementById('deleteTestimonialModal');
+            let deleteModal = null;
+            if (deleteModalEl && typeof bootstrap !== 'undefined') {
+                deleteModal = new bootstrap.Modal(deleteModalEl);
+            }
+
+            document.querySelectorAll('.btn-delete-testimonial').forEach(button => {
+                button.addEventListener('click', function () {
+                    const id = this.getAttribute('data-id');
+                    const name = this.getAttribute('data-name');
+
+                    document.getElementById('deleteTestimonialIdInput').value = id;
+                    document.getElementById('deleteTestimonialNameText').textContent = name;
+
+                    if (deleteModal) {
+                        deleteModal.show();
+                    } else {
+                        if (confirm(`Are you sure you want to delete testimonial from "${name}"?`)) {
+                            document.getElementById('deleteTestimonialForm').submit();
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

@@ -1,0 +1,99 @@
+@model SkillCreateViewModel
+@{
+    ViewData["Title"] = "Add Technology Competency";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid pt-4 px-4">
+    <!-- Header -->
+    <div class="row g-4 mb-4">
+        <div class="col-12">
+            <div class="bg-light rounded p-4 d-flex align-items-center justify-content-between shadow-sm">
+                <div class="d-flex align-items-center">
+                    <div class="btn-square bg-primary text-white rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                        <i class="fa fa-plus-circle fa-lg"></i>
+                    </div>
+                    <div>
+                        <h4 class="mb-1 text-primary fw-bold">Add Technology Competency</h4>
+                        <p class="text-muted mb-0 small">Add a new engineering capability, programming language, or cloud tool to Aveny Technologies' tech stack.</p>
+                    </div>
+                </div>
+                <a asp-area="Admin" asp-controller="Skills" asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4">
+                    <i class="fa fa-arrow-left me-2"></i>Back to Tech Stack
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Notifications -->
+    @if (TempData["ErrorMessage"] is not null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show rounded-3 shadow-sm border-0 d-flex align-items-center mb-4" role="alert">
+            <i class="fa fa-exclamation-triangle fa-lg me-2 text-danger"></i>
+            <div>@TempData["ErrorMessage"]</div>
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Form Card -->
+    <div class="row g-4 justify-content-center">
+        <div class="col-12 col-lg-8">
+            <div class="bg-light rounded p-4 p-md-5 shadow-sm">
+                <form asp-area="Admin" asp-controller="Skills" asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-3 mb-4" role="alert"></div>
+
+                    <div class="mb-4">
+                        <label asp-for="Name" class="form-label fw-bold">Technology / Framework Name</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white"><i class="fa fa-code text-muted"></i></span>
+                            <input asp-for="Name" class="form-control" placeholder="e.g. .NET 10 &amp; C#, Kubernetes, Cloud Architecture, React, PostgreSQL" autofocus />
+                        </div>
+                        <span asp-validation-for="Name" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <label asp-for="Percentage" class="form-label fw-bold mb-0">Mastery / Proficiency Percentage (%)</label>
+                            <span class="badge bg-primary px-3 py-2 rounded-pill fs-6" id="percentageBadge">%@Model.Percentage</span>
+                        </div>
+                        <input asp-for="Percentage" type="range" class="form-range" min="0" max="100" step="1" id="percentageRange" oninput="updatePercentageDisplay(this.value)" />
+                        <div class="d-flex justify-content-between text-muted small">
+                            <span>0% Foundation</span>
+                            <span>50% Intermediate</span>
+                            <span>100% Industry Mastery</span>
+                        </div>
+                        <span asp-validation-for="Percentage" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="DisplayOrder" class="form-label fw-bold">Display Order</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white"><i class="fa fa-sort-numeric-down text-muted"></i></span>
+                            <input asp-for="DisplayOrder" type="number" class="form-control" placeholder="1" />
+                        </div>
+                        <div class="form-text">Technologies with lower order numbers appear first on the public website.</div>
+                        <span asp-validation-for="DisplayOrder" class="text-danger small"></span>
+                    </div>
+
+                    <div class="d-flex gap-2 pt-3 border-top">
+                        <button type="submit" class="btn btn-primary rounded-pill px-4 py-2 shadow-sm">
+                            <i class="fa fa-save me-2"></i>Save Technology
+                        </button>
+                        <a asp-area="Admin" asp-controller="Skills" asp-action="Index" class="btn btn-light rounded-pill px-4 py-2">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function updatePercentageDisplay(val) {
+            document.getElementById('percentageBadge').textContent = '%' + val;
+        }
+    </script>
+}

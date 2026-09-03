@@ -1,0 +1,13 @@
+**/.git
+**/.gitignore
+**/.vs
+**/.vscode
+**/bin
+**/obj
+**/scratch
+**/.gemini
+ModernPortfolio/
+__MACOSX/
+Dockerfile*
+.dockerignore
+*.md

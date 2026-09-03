@@ -1,0 +1,30 @@
+name: .NET CI Build & Test
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build:
+    name: Build & Verify
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: Restore Dependencies
+      run: dotnet restore ModernPortfolio.csproj
+
+    - name: Build Solution
+      run: dotnet build ModernPortfolio.csproj --configuration Release --no-restore
+
+    - name: Test Docker Build
+      run: docker build -t modernportfolio:latest .

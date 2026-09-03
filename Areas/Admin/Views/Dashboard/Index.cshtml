@@ -1,4 +1,101 @@
 @{
-    ViewData["Title"] = "Dasboard";
+    ViewData["Title"] = "Aveny Control Console";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
+<div class="container-fluid pt-4 px-4">
+    <!-- Welcome Banner -->
+    <div class="row g-4 mb-4">
+        <div class="col-12">
+            <div class="bg-light rounded p-4 p-md-5 shadow-sm position-relative overflow-hidden">
+                <div class="row align-items-center">
+                    <div class="col-md-9">
+                        <span class="badge bg-primary px-3 py-2 rounded-pill mb-3">Aveny Technologies Enterprise Console</span>
+                        <h2 class="fw-bold text-dark mb-2">Welcome to Aveny Technologies Admin Portal</h2>
+                        <p class="text-muted mb-4 lead fs-6">
+                            Review incoming client inquiries, manage corporate biography, showcase enterprise software solutions, and configure engineering capabilities.
+                        </p>
+                        <div class="d-flex flex-wrap gap-2">
+                            <a asp-area="Admin" asp-controller="Contacts" asp-action="Index" class="btn btn-primary rounded-pill px-4 py-2 shadow-sm">
+                                <i class="fa fa-inbox me-2"></i>View Inquiries
+                            </a>
+                            <a asp-area="Admin" asp-controller="Projects" asp-action="Create" class="btn btn-outline-primary rounded-pill px-4 py-2">
+                                <i class="fa fa-plus-circle me-2"></i>Publish Solution
+                            </a>
+                            <a href="/" target="_blank" class="btn btn-light rounded-pill px-4 py-2 border">
+                                <i class="fa fa-external-link-alt me-2"></i>View Live Website
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Navigation Modules -->
+    <div class="row g-4 mb-4">
+        <!-- Client Inquiries Module Card -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-light rounded p-4 h-100 shadow-sm d-flex flex-column justify-content-between">
+                <div>
+                    <div class="btn-square bg-danger bg-opacity-10 text-danger rounded-circle mb-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                        <i class="fa fa-envelope-open-text fa-lg"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-2">Client Inquiries</h5>
+                    <p class="text-muted small mb-4">Read incoming contact requests, enterprise project scopes, and reply directly to clients via email.</p>
+                </div>
+                <a asp-area="Admin" asp-controller="Contacts" asp-action="Index" class="btn btn-sm btn-outline-danger rounded-pill w-100 py-2">
+                    Open Inbox <i class="fa fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Solutions Module Card -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-light rounded p-4 h-100 shadow-sm d-flex flex-column justify-content-between">
+                <div>
+                    <div class="btn-square bg-info bg-opacity-10 text-info rounded-circle mb-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                        <i class="fa fa-laptop-code fa-lg"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-2">Enterprise Solutions</h5>
+                    <p class="text-muted small mb-4">Showcase software platforms, cloud applications, case studies, live demo URLs, and GitHub repos.</p>
+                </div>
+                <a asp-area="Admin" asp-controller="Projects" asp-action="Index" class="btn btn-sm btn-outline-info rounded-pill w-100 py-2">
+                    Manage Solutions <i class="fa fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Company Profile Module Card -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-light rounded p-4 h-100 shadow-sm d-flex flex-column justify-content-between">
+                <div>
+                    <div class="btn-square bg-primary bg-opacity-10 text-primary rounded-circle mb-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                        <i class="fa fa-building fa-lg"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-2">Company Overview</h5>
+                    <p class="text-muted small mb-4">Update corporate headline, company mission, global headquarters, phone hotline, and LinkedIn profile.</p>
+                </div>
+                <a asp-area="Admin" asp-controller="About" asp-action="Index" class="btn btn-sm btn-outline-primary rounded-pill w-100 py-2">
+                    Manage Profile <i class="fa fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Tech Stack Module Card -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-light rounded p-4 h-100 shadow-sm d-flex flex-column justify-content-between">
+                <div>
+                    <div class="btn-square bg-success bg-opacity-10 text-success rounded-circle mb-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                        <i class="fa fa-code fa-lg"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-2">Tech Capabilities</h5>
+                    <p class="text-muted small mb-4">Manage core technology competencies, cloud platforms, programming languages, and proficiency ratings.</p>
+                </div>
+                <a asp-area="Admin" asp-controller="Skills" asp-action="Index" class="btn btn-sm btn-outline-success rounded-pill w-100 py-2">
+                    Manage Tech Stack <i class="fa fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

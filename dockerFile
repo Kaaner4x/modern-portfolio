@@ -1,0 +1,26 @@
+# 1. Build Stage
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /src
+
+# Copy project file and restore dependencies
+COPY ["ModernPortfolio.csproj", "./"]
+RUN dotnet restore "ModernPortfolio.csproj"
+
+# Copy full source code
+COPY . .
+
+# Build and publish release output
+RUN dotnet publish "ModernPortfolio.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+# 2. Runtime Stage
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
+WORKDIR /app
+COPY --from=build /app/publish .
+
+# Set environment variables for production container
+ENV ASPNETCORE_URLS=http://+:8080
+ENV ASPNETCORE_ENVIRONMENT=Production
+
+EXPOSE 8080
+
+ENTRYPOINT ["dotnet", "ModernPortfolioApp.dll"]
