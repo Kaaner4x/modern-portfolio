@@ -1,78 +1,175 @@
-<mxfile host="Electron" agent="Mozilla/5.0">
-  <diagram id="modern_portfolio_schema" name="Modern Portfolio Architecture">
-    <mxGraphModel dx="1030" dy="674" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+<mxfile host="Electron" modified="2026-09-04T00:00:00.000Z" agent="Mozilla/5.0" etag="mp_arch_v2" version="24.4.0" type="device">
+  <diagram id="modern_portfolio_architecture" name="Modern Portfolio System Architecture">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="950" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="AppContainer" parent="1" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" value="Modern Portfolio Application (ASP.NET Core MVC)" vertex="1">
-          <mxGeometry height="480" width="600" x="200" y="70" as="geometry" />
+
+        <!-- Main Title Header -->
+        <mxCell id="HeaderTitle" value="ModernPortfolio - Enterprise System Architecture (.NET 10 &amp; Dapper &amp; PostgreSQL)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fillColor=#1e293b;strokeColor=#0f172a;fontColor=#ffffff;fontSize=20;fontStyle=1;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="1320" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="ControllerGrp" parent="AppContainer" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;" value="Controllers" vertex="1">
-          <mxGeometry height="150" width="160" x="30" y="50" as="geometry" />
+
+        <!-- 1. Client Layer -->
+        <mxCell id="ClientLayer" value="Client Layer (Browser &amp; Devices)" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=#f8fafc;strokeColor=#64748b;fontStyle=1;fontSize=14;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="90" width="180" height="800" as="geometry" />
         </mxCell>
-        <mxCell id="HomeController" parent="ControllerGrp" style="rounded=1;whiteSpace=wrap;html=1;" value="HomeController" vertex="1">
-          <mxGeometry height="40" width="120" x="20" y="50" as="geometry" />
+        <mxCell id="ClientPublic" value="Public Visitors&#xa;(Desktop &amp; Mobile)" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#38bdf8;strokeColor=#0284c7;fontStyle=1;" vertex="1" parent="ClientLayer">
+          <mxGeometry x="60" y="80" width="50" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="ModelGrp" parent="AppContainer" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=#ffe6cc;strokeColor=#d79b00;" value="Models (Domain)" vertex="1">
-          <mxGeometry height="360" width="180" x="380" y="50" as="geometry" />
+        <mxCell id="ClientAdmin" value="Portal Administrators&#xa;(CMS Management)" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#f43f5e;strokeColor=#e11d48;fontStyle=1;" vertex="1" parent="ClientLayer">
+          <mxGeometry x="60" y="440" width="50" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="ModelAbout" parent="ModelGrp" style="rounded=1;whiteSpace=wrap;html=1;" value="About" vertex="1">
-          <mxGeometry height="35" width="120" x="30" y="50" as="geometry" />
+
+        <!-- 2. Application & Presentation Layer -->
+        <mxCell id="AppContainer" value="ASP.NET Core .NET 10 MVC Application (Kestrel Web Server / Docker Container)" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=#eff6ff;strokeColor=#3b82f6;fontStyle=1;fontSize=14;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="90" width="760" height="800" as="geometry" />
         </mxCell>
-        <mxCell id="ModelContact" parent="ModelGrp" style="rounded=1;whiteSpace=wrap;html=1;" value="Contact" vertex="1">
-          <mxGeometry height="35" width="120" x="30" y="100" as="geometry" />
+
+        <!-- Middleware Section -->
+        <mxCell id="MiddlewareGrp" value="Middleware Pipeline (ForwardedHeaders, Cookie Auth, Antiforgery, StaticAssets)" style="swimlane;whiteSpace=wrap;html=1;startSize=25;fillColor=#e0f2fe;strokeColor=#0284c7;fontStyle=1;fontSize=12;" vertex="1" parent="AppContainer">
+          <mxGeometry x="20" y="40" width="720" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="ModelProject" parent="ModelGrp" style="rounded=1;whiteSpace=wrap;html=1;" value="Project" vertex="1">
-          <mxGeometry height="35" width="120" x="30" y="150" as="geometry" />
+        <mxCell id="MW_Details" value="HTTPS Redirection | Routing | Cookie Authentication | ClaimsPrincipal Authorization | Anti-CSRF Token Validation" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontColor=#0369a1;" vertex="1" parent="MiddlewareGrp">
+          <mxGeometry x="10" y="25" width="700" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="ModelSkill" parent="ModelGrp" style="rounded=1;whiteSpace=wrap;html=1;" value="Skill" vertex="1">
-          <mxGeometry height="35" width="120" x="30" y="200" as="geometry" />
+
+        <!-- Public Controllers -->
+        <mxCell id="PublicCtrlGrp" value="Public Controllers &amp; Views" style="swimlane;whiteSpace=wrap;html=1;startSize=25;fillColor=#f0fdf4;strokeColor=#22c55e;fontStyle=1;" vertex="1" parent="AppContainer">
+          <mxGeometry x="20" y="120" width="340" height="200" as="geometry" />
         </mxCell>
-        <mxCell id="ModelTestimonial" parent="ModelGrp" style="rounded=1;whiteSpace=wrap;html=1;" value="Testimonial" vertex="1">
-          <mxGeometry height="35" width="120" x="30" y="250" as="geometry" />
+        <mxCell id="CtrlHome" value="HomeController&#xa;(Index, About, Contact)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontSize=11;fontStyle=1;" vertex="1" parent="PublicCtrlGrp">
+          <mxGeometry x="20" y="35" width="140" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="ModelError" parent="ModelGrp" style="rounded=1;whiteSpace=wrap;html=1;" value="ErrorViewModel" vertex="1">
-          <mxGeometry height="35" width="120" x="30" y="300" as="geometry" />
+        <mxCell id="CtrlProject" value="ProjectController&#xa;(Index, Details)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontSize=11;fontStyle=1;" vertex="1" parent="PublicCtrlGrp">
+          <mxGeometry x="180" y="35" width="140" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="ViewGrp" parent="AppContainer" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=#e1d5e7;strokeColor=#9673a6;" value="Views (UI)" vertex="1">
-          <mxGeometry height="150" width="160" x="30" y="280" as="geometry" />
+        <mxCell id="PublicViews" value="Public Razor Views (HTML5, Bootstrap 5, AOS, Swiper, GLightbox)&#xa;- Views/Home (Index, About, Contact)&#xa;- Views/Project (Index, Details)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#86efac;fontSize=11;" vertex="1" parent="PublicCtrlGrp">
+          <mxGeometry x="20" y="100" width="300" height="85" as="geometry" />
         </mxCell>
-        <mxCell id="ViewHomeIndex" parent="ViewGrp" style="rounded=1;whiteSpace=wrap;html=1;" value="Home/Index.cshtml" vertex="1">
-          <mxGeometry height="30" width="120" x="20" y="50" as="geometry" />
+
+        <!-- Admin CMS Controllers -->
+        <mxCell id="AdminCtrlGrp" value="Admin CMS Area ([Area(&quot;Admin&quot;)], [Authorize])" style="swimlane;whiteSpace=wrap;html=1;startSize=25;fillColor=#fdf2f8;strokeColor=#ec4899;fontStyle=1;" vertex="1" parent="AppContainer">
+          <mxGeometry x="380" y="120" width="360" height="200" as="geometry" />
         </mxCell>
-        <mxCell id="ViewHomePrivacy" parent="ViewGrp" style="rounded=1;whiteSpace=wrap;html=1;" value="Home/Privacy.cshtml" vertex="1">
-          <mxGeometry height="30" width="120" x="20" y="90" as="geometry" />
+        <mxCell id="CtrlAdminDash" value="DashboardController&#xa;AccountController" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce7f3;strokeColor=#db2777;fontSize=10;fontStyle=1;" vertex="1" parent="AdminCtrlGrp">
+          <mxGeometry x="15" y="35" width="150" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="User" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#f8cecc;strokeColor=#b85450;" value="User (Browser)" vertex="1">
-          <mxGeometry height="80" width="40" x="40" y="250" as="geometry" />
+        <mxCell id="CtrlAdminProjects" value="ProjectsController&#xa;SkillsController" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce7f3;strokeColor=#db2777;fontSize=10;fontStyle=1;" vertex="1" parent="AdminCtrlGrp">
+          <mxGeometry x="180" y="35" width="165" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="EdgeUserToController" edge="1" parent="1" source="User" style="endArrow=classic;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="HomeController" value="HTTP Request">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="CtrlAdminTestimonial" value="TestimonialsController&#xa;ContactsController" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce7f3;strokeColor=#db2777;fontSize=10;fontStyle=1;" vertex="1" parent="AdminCtrlGrp">
+          <mxGeometry x="15" y="85" width="150" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="EdgeControllerToModel" edge="1" parent="1" source="HomeController" style="endArrow=classic;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.2;entryDx=0;entryDy=0;entryPerimeter=0;" target="ModelGrp" value="Uses / Populates">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="CtrlAdminSettings" value="AboutController&#xa;SettingsController" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce7f3;strokeColor=#db2777;fontSize=10;fontStyle=1;" vertex="1" parent="AdminCtrlGrp">
+          <mxGeometry x="180" y="85" width="165" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="EdgeControllerToView" edge="1" parent="1" source="HomeController" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="ViewGrp" value="Returns View()">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="AdminViews" value="Admin Razor Views (Dashmin UI, Modals, Sliders, Form Validation)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f472b6;fontSize=10;" vertex="1" parent="AdminCtrlGrp">
+          <mxGeometry x="15" y="140" width="330" height="45" as="geometry" />
         </mxCell>
-        <mxCell id="EdgeViewToUser" edge="1" parent="1" source="ViewGrp" style="endArrow=classic;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="User" value="HTTP Response (HTML)">
+
+        <!-- Service Layer (Business Logic) -->
+        <mxCell id="ServiceLayerGrp" value="Service Layer (Business Logic &amp; Orchestration)" style="swimlane;whiteSpace=wrap;html=1;startSize=25;fillColor=#fffbeb;strokeColor=#f59e0b;fontStyle=1;" vertex="1" parent="AppContainer">
+          <mxGeometry x="20" y="340" width="720" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="SvcProject" value="ProjectService&#xa;(IProjectService)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontSize=10;" vertex="1" parent="ServiceLayerGrp">
+          <mxGeometry x="15" y="35" width="125" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="SvcSkill" value="SkillService&#xa;(ISkillService)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontSize=10;" vertex="1" parent="ServiceLayerGrp">
+          <mxGeometry x="155" y="35" width="125" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="SvcAbout" value="AboutService&#xa;(IAboutService)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontSize=10;" vertex="1" parent="ServiceLayerGrp">
+          <mxGeometry x="295" y="35" width="125" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="SvcTestimonial" value="TestimonialService&#xa;(ITestimonialService)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontSize=10;" vertex="1" parent="ServiceLayerGrp">
+          <mxGeometry x="435" y="35" width="135" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="SvcContact" value="ContactService&#xa;(IContactService)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontSize=10;" vertex="1" parent="ServiceLayerGrp">
+          <mxGeometry x="585" y="35" width="120" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="SvcUser" value="UserService &amp; UserSeedService&#xa;(BCrypt Hashing &amp; Auth Verification)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontSize=10;" vertex="1" parent="ServiceLayerGrp">
+          <mxGeometry x="15" y="95" width="220" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="SvcImage" value="ImageService (IImageService)&#xa;(MIME Check, GUID Naming, Traversal Guard)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontSize=10;" vertex="1" parent="ServiceLayerGrp">
+          <mxGeometry x="250" y="95" width="235" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="SvcDbInit" value="DatabaseInitializerService&#xa;(Schema Creation &amp; Auto-Seed)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontSize=10;fontStyle=1;" vertex="1" parent="ServiceLayerGrp">
+          <mxGeometry x="500" y="95" width="205" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="ViewModelsNote" value="ViewModels: ProjectViewModel, AboutViewModel, SkillViewModel, ContactViewModel, LoginViewModel, SettingsViewModel" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontColor=#78350f;" vertex="1" parent="ServiceLayerGrp">
+          <mxGeometry x="15" y="155" width="690" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Data Access Layer (Repositories & Dapper) -->
+        <mxCell id="DataAccessGrp" value="Data Access Layer (Generic &amp; Specialized Repositories via Dapper Micro-ORM)" style="swimlane;whiteSpace=wrap;html=1;startSize=25;fillColor=#f5f3ff;strokeColor=#8b5cf6;fontStyle=1;" vertex="1" parent="AppContainer">
+          <mxGeometry x="20" y="560" width="720" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="GenericRepo" value="GenericRepository&lt;T&gt;&#xa;[CreateAsync, GetByIdAsync, GetAllAsync, UpdateAsync, DeleteAsync]&#xa;(Reflection &amp; Dapper Parameter Mapping)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede9fe;strokeColor=#7c3aed;fontSize=11;fontStyle=1;" vertex="1" parent="DataAccessGrp">
+          <mxGeometry x="15" y="35" width="690" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="SpecRepos" value="Specialized Repositories:&#xa;IProjectRepository | ISkillRepository | IAboutRepository | ITestimonialRepository | IContactRepository | IUserRepository" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#a78bfa;fontSize=11;" vertex="1" parent="DataAccessGrp">
+          <mxGeometry x="15" y="110" width="690" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="DapperEngine" value="Dapper Micro-ORM Engine &amp; Npgsql ADO.NET Connection Pool" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ddd6fe;strokeColor=#6d28d9;fontSize=11;fontStyle=1;" vertex="1" parent="DataAccessGrp">
+          <mxGeometry x="15" y="165" width="690" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- 3. Persistence & Storage Layer -->
+        <mxCell id="PersistenceLayer" value="Persistence &amp; Infrastructure" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=#f1f5f9;strokeColor=#475569;fontStyle=1;fontSize=14;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="90" width="320" height="800" as="geometry" />
+        </mxCell>
+        <mxCell id="PostgresDB" value="PostgreSQL 16 Database&#xa;(Docker Container / Cloud Service)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#dbeafe;strokeColor=#2563eb;fontStyle=1;fontSize=12;" vertex="1" parent="PersistenceLayer">
+          <mxGeometry x="35" y="50" width="250" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="TablesList" value="Relational Database Tables:&#xa;• Users (Id, UserName, PasswordHash)&#xa;• About (Id, Title, Bio, Email, Socials)&#xa;• Skills (Id, Name, Percentage, Order)&#xa;• Projects (Id, Title, Description, URLs)&#xa;• Testimonials (Id, Client, Rating, Active)&#xa;• Contacts (Id, Name, Email, Msg, IsRead)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#93c5fd;fontSize=11;align=left;spacingLeft=10;" vertex="1" parent="PersistenceLayer">
+          <mxGeometry x="35" y="170" width="250" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="MediaStorage" value="Local / Container Media Storage&#xa;(wwwroot/ui/img/uploads)&#xa;• Uploaded project cover graphics&#xa;• Client endorsement photos&#xa;• Executive profile pictures" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef9c3;strokeColor=#ca8a04;fontSize=11;align=left;spacingLeft=10;" vertex="1" parent="PersistenceLayer">
+          <mxGeometry x="35" y="360" width="250" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="CloudEnv" value="Cloud 12-Factor Support:&#xa;• DATABASE_URL Auto-Parser&#xa;• Reverse Proxy SSL Headers&#xa;• Docker Compose Multi-Container" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e8ff;strokeColor=#9333ea;fontSize=11;align=left;spacingLeft=10;" vertex="1" parent="PersistenceLayer">
+          <mxGeometry x="35" y="510" width="250" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- Inter-Layer Connectors -->
+        <mxCell id="EdgeClientPublicToApp" edge="1" parent="1" source="ClientPublic" target="MiddlewareGrp" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#0284c7;" value="HTTP / HTTPS">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="60" y="435" />
+              <mxPoint x="190" y="160" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="EdgeModelToView" edge="1" parent="1" source="ModelGrp" style="endArrow=classic;dashed=1;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="ViewGrp" value="Data Binding">
+        <mxCell id="EdgeClientAdminToApp" edge="1" parent="1" source="ClientAdmin" target="MiddlewareGrp" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#e11d48;" value="Admin Auth / Cookie">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="190" y="550" />
+              <mxPoint x="190" y="180" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EdgeCtrlToSvc" edge="1" parent="1" source="PublicViews" target="ServiceLayerGrp" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#16a34a;" value="Invokes Services">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="Database" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" value="PostgreSQL DB&amp;#10;(Docker Container)" vertex="1">
-          <mxGeometry height="80" width="120" x="850" y="220" as="geometry" />
-        </mxCell>
-        <mxCell id="EdgeAppToDatabase" edge="1" parent="1" source="RepositoryGrp" style="endArrow=classic;startArrow=classic;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" target="Database" value="Dapper / Npgsql">
+        <mxCell id="EdgeAdminToSvc" edge="1" parent="1" source="AdminViews" target="ServiceLayerGrp" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#db2777;" value="Invokes Services">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="RepositoryGrp" parent="AppContainer" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=#fff2cc;strokeColor=#d6b656;" value="Repositories (Dapper)" vertex="1">
-          <mxGeometry height="150" width="160" x="205" y="160" as="geometry" />
+        <mxCell id="EdgeSvcToRepo" edge="1" parent="1" source="ServiceLayerGrp" target="GenericRepo" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#d97706;" value="CRUD Operations">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="EdgeDapperToPostgres" edge="1" parent="1" source="DapperEngine" target="PostgresDB" style="endArrow=classic;startArrow=classic;html=1;strokeWidth=3;strokeColor=#2563eb;" value="Async SQL / TCP (Npgsql)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1000" y="775" />
+              <mxPoint x="1000" y="190" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EdgeImageToStorage" edge="1" parent="1" source="SvcImage" target="MediaStorage" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#ca8a04;dashed=1;" value="File I/O">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1020" y="450" />
+            </Array>
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>
