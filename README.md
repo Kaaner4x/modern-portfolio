@@ -1,10 +1,4 @@
-<p align="center">
-  <a href="https://github.com/Kaaner4x/modern-portfolio">
-    <img src="https://raw.githubusercontent.com/Kaaner4x/modern-portfolio/main/wwwroot/ui/favicon.png" alt="Modern Portfolio Logo" width="80" height="80" onerror="this.style.display='none'"/>
-  </a>
-</p>
-
-<h1 align="center">ModernPortfolio</h1>
+<h1 align="center">Modern Portfolio</h1>
 
 <p align="center">
   <strong>Enterprise-Grade Dynamic Portfolio & Content Management System (CMS)</strong><br>
@@ -48,7 +42,7 @@
 
 ## 📌 Project Overview
 
-**ModernPortfolio** is a high-performance, full-stack enterprise web application and dynamic Content Management System (CMS) built with **ASP.NET Core (.NET 10)**. Architected for speed, resilience, and maintainability, it leverages **Dapper Micro-ORM** and native **PostgreSQL** connection pooling to deliver sub-millisecond query execution without the heavy overhead of traditional ORMs.
+**Modern Portfolio** is a high-performance, full-stack enterprise web application and dynamic Content Management System (CMS) built with **ASP.NET Core (.NET 10)**. Architected for speed, resilience, and maintainability, it leverages **Dapper Micro-ORM** and native **PostgreSQL** connection pooling to deliver sub-millisecond query execution without the heavy overhead of traditional ORMs.
 
 The platform provides a responsive, modern public-facing portfolio alongside a secured administrative control console (`/Admin`). Key capabilities include automated database provisioning and seed data initialization, cookie-based authentication with ClaimsPrincipal, BCrypt cryptographic password hashing, defensive file upload pipelines, and multi-stage Docker containerization.
 
@@ -204,7 +198,7 @@ Explore the visual tour of the **Public Showcase Portal** and the **Admin Contro
 
 ## 🏛 System Architecture
 
-ModernPortfolio follows an **N-Tier Clean Architecture** emphasizing Separation of Concerns (SoC), Inversion of Control (IoC), and Loose Coupling:
+Modern Portfolio follows an **N-Tier Clean Architecture** emphasizing Separation of Concerns (SoC), Inversion of Control (IoC), and Loose Coupling:
 
 ```mermaid
 graph TD
@@ -268,7 +262,7 @@ graph TD
 
 ## 🗄 Database Design & Schema
 
-ModernPortfolio runs on **PostgreSQL 16**. The schema is managed dynamically on startup by `DatabaseInitializerService`, ensuring automatic creation of all tables and seed data without requiring manual SQL script executions.
+Modern Portfolio runs on **PostgreSQL 16**. The schema is managed dynamically on startup by `DatabaseInitializerService`, ensuring automatic creation of all tables and seed data without requiring manual SQL script executions.
 
 ```mermaid
 erDiagram
@@ -340,7 +334,7 @@ erDiagram
 
 ## 🚀 Quick Start & Installation Guide
 
-Get **ModernPortfolio** running locally on your machine in just a few minutes.
+Get **Modern Portfolio** running locally on your machine in just a few minutes.
 
 ### Prerequisites
 - [Git](https://git-scm.com/) installed
@@ -441,7 +435,7 @@ On initial database initialization, a default administrator account is automatic
 
 ## ⚙️ Configuration & Environment Variables
 
-ModernPortfolio supports multiple methods for supplying configuration parameters and database connection strings.
+Modern Portfolio supports multiple methods for supplying configuration parameters and database connection strings.
 
 ### 1. Connection String Formats
 
@@ -451,7 +445,7 @@ Host=localhost; Port=5432; Database=modernportfolio; Username=your_username; Pas
 ```
 
 #### Cloud Database URI Format (`DATABASE_URL`)
-ModernPortfolio includes a built-in URI parser for 12-factor cloud platforms (Render, Railway, Supabase, Neon):
+Modern Portfolio includes a built-in URI parser for 12-factor cloud platforms (Render, Railway, Supabase, Neon):
 ```
 DATABASE_URL=postgres://your_username:your_password@your_host:5432/your_database
 ```
