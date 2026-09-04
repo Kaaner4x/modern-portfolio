@@ -208,46 +208,46 @@ ModernPortfolio follows an **N-Tier Clean Architecture** emphasizing Separation 
 
 ```mermaid
 graph TD
-    subgraph Client Layer
-        Browser[Client Web Browser / Mobile Device]
+    subgraph ClientLayer [Client Layer]
+        Browser["Client Web Browser / Mobile Device"]
     end
 
-    subgraph Presentation Layer [ASP.NET Core MVC .NET 10]
-        Controllers[Public & Admin Controllers]
-        ViewModels[Strongly Typed ViewModels]
-        Views[Razor Views & Partial Templates]
-        Auth[Cookie Authentication & Anti-CSRF]
+    subgraph PresentationLayer ["ASP.NET Core MVC .NET 10"]
+        Controllers["Public & Admin Controllers"]
+        ViewModels["Strongly Typed ViewModels"]
+        Views["Razor Views & Partial Templates"]
+        Auth["Cookie Authentication & Anti-CSRF"]
     end
 
-    subgraph Business Logic Layer [Services]
-        ProjService[Project Service]
-        SkillService[Skill Service]
-        AboutService[About Service]
-        TestimonialService[Testimonial Service]
-        ContactService[Contact Service]
-        UserService[User & Security Service]
-        ImageService[Image Storage Service]
-        DbInitService[DB Initializer & Seeder]
+    subgraph BusinessLogicLayer [Services]
+        ProjService["Project Service"]
+        SkillService["Skill Service"]
+        AboutService["About Service"]
+        TestimonialService["Testimonial Service"]
+        ContactService["Contact Service"]
+        UserService["User & Security Service"]
+        ImageService["Image Storage Service"]
+        DbInitService["DB Initializer & Seeder"]
     end
 
-    subgraph Data Access Layer [Repositories]
-        GenericRepo[GenericRepository&lt;T&gt;]
-        SpecializedRepos[Project, Skill, User, Contact Repositories]
-        Dapper[Dapper Micro-ORM Engine]
+    subgraph DataAccessLayer [Repositories]
+        GenericRepo["GenericRepository<T>"]
+        SpecializedRepos["Project, Skill, User, Contact Repositories"]
+        Dapper["Dapper Micro-ORM Engine"]
     end
 
-    subgraph Infrastructure & Persistence Layer
-        Npgsql[Npgsql ADO.NET Provider]
-        PostgreSQL[(PostgreSQL 16 Database)]
-        FileSystem[Local / Container Storage wwwroot]
+    subgraph InfrastructureLayer ["Infrastructure & Persistence Layer"]
+        Npgsql["Npgsql ADO.NET Provider"]
+        PostgreSQL[("PostgreSQL 16 Database")]
+        FileSystem["Local / Container Storage wwwroot"]
     end
 
-    Browser <-->|HTTP / HTTPS| Presentation Layer
+    Browser <-->|HTTP / HTTPS| PresentationLayer
     Controllers --> ViewModels
     Controllers --> Views
-    Controllers --> Business Logic Layer
-    Business Logic Layer --> Data Access Layer
-    Data Access Layer --> Dapper
+    Controllers --> BusinessLogicLayer
+    BusinessLogicLayer --> DataAccessLayer
+    DataAccessLayer --> Dapper
     Dapper --> Npgsql
     Npgsql <-->|TCP / Connection Pool| PostgreSQL
     ImageService <-->|I/O Operations| FileSystem
@@ -489,7 +489,7 @@ COPY --from=build /app/publish .
 ENV ASPNETCORE_URLS=http://+:8080
 ENV ASPNETCORE_ENVIRONMENT=Production
 EXPOSE 8080
-ENTRYPOINT ["dotnet", "ModernPortfolioApp.dll"]
+ENTRYPOINT ["dotnet", "ModernPortfolio.dll"]
 ```
 
 ### Docker Compose Architecture
